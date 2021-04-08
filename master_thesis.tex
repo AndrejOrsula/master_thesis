@@ -1,6 +1,8 @@
 \documentclass[12pt,a4paper,oneside]{memoir}
 
-%%% Input Style
+%%% Input document metadata
+\input{_frontmatter/_meta}
+%%% Input style
 \input{_style/_style}
 
 %%% Set path to parent graphics directory
@@ -9,19 +11,19 @@
 %%% The document itself
 \begin{document}
 
-    %%% Include frontmatter
-    \include{_frontmatter/_frontmatter}
+%%% Include frontmatter
+\include{_frontmatter/_frontmatter}
 
-    %%% Add Table of content
-    \tableofcontents*
+%%% Add table of content
+\tableofcontents*
 
-    %%% Include the main content
-    \include{content/_content}
+%%% Include the main content
+\include{content/_content}
 
-    %%% Include bibliography
-    \bibliography{bibliography/bibliography}
+%%% Include bibliography
+\bibliography{bibliography/bibliography}
 
-    %%% Include appendices
-    \include{content/appendix/_appendix}
+%%% Include appendices
+\include{content/appendix/_appendix}
 
 \end{document}
