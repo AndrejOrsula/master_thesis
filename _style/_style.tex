@@ -1,0 +1,96 @@
+%%% Use all necessary packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage[english]{babel}
+\usepackage{booktabs}
+\usepackage{calc}
+\usepackage[T1]{fontenc}
+\usepackage{framed}
+\usepackage{geometry}
+\usepackage[dvips]{graphicx}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{lastpage}
+\usepackage{microtype}
+\usepackage{multirow}
+\usepackage{natbib}
+\usepackage{tabularx}
+\usepackage{times}
+\usepackage{xcolor}
+\usepackage{background}
+\usepackage{tikz}
+
+
+%%% Define custom colours
+\definecolor{aaudarkblue}{RGB}{33,26,82}
+\definecolor{aaulightblue}{RGB}{89,79,191}
+\definecolor{aaugrey}{RGB}{84,97,110}
+
+
+%%% Setup page geometry
+\geometry{a4paper,left=25mm,right=25mm,bindingoffset=0mm,top=25mm,bottom=25mm,heightrounded} % PDF
+% \geometry{a4paper,left=20mm,right=20mm,bindingoffset=10mm,top=25mm,bottom=25mm,heightrounded} % PRINT
+
+
+%%% Setup hyperref
+\hypersetup{
+  pdftitle={Title},
+  pdfauthor={Author},
+  pdfsubject={Subject},
+  pdfcreator={Author},
+  breaklinks=true,colorlinks=true,
+  linkcolor=aaudarkblue,urlcolor=aaudarkblue,citecolor=aaudarkblue,filecolor=aaudarkblue, % PDF
+  % linkcolor=black,urlcolor=black,citecolor=black,filecolor=black, % PRINT
+  pdfstartview=FitV,
+}
+
+
+%%% Style of chapters
+% \chapterstyle{bianchi}
+% \chapterstyle{ger}
+% \chapterstyle{madsen}
+% \chapterstyle{ell}
+\chapterstyle{section}
+
+
+%%% Style of sections, subsections, ...
+\setsecheadstyle{\Large\bfseries\sffamily\raggedright}
+\setsubsecheadstyle{\large\bfseries\sffamily\raggedright}
+\setsubsubsecheadstyle{\bfseries\sffamily\raggedright}
+
+
+%%% Change max depth for numbering and table of contents
+\maxsecnumdepth{subsection}
+\maxtocdepth{subsection}
+
+
+%%% Change default names
+\renewcommand\bibname{References} % change Bibliography to references
+\renewcommand\figurename{Fig.} % change Figure to Fig.
+
+
+%%% Style of page numbering
+%\pagestyle{companion}\nouppercaseheads 
+%\pagestyle{headings}
+%\pagestyle{Ruled}
+\pagestyle{plain}
+\makepagestyle{plain}
+\makeevenfoot{plain}{}{\thepage}{}
+\makeoddfoot{plain}{}{\thepage}{}
+\makeevenhead{plain}{}{}{}
+\makeoddhead{plain}{}{}{}
+
+
+%%% Set bibliography style
+\bibliographystyle{chicago}
+% Default to (name, year)
+\renewcommand\cite{\citep}
+% Use only one hyperlink instead of two
+\makeatletter
+\renewcommand\hyper@natlinkbreak[2]{#1}
+\makeatother
+
+%%% Remove footnote separator
+\renewcommand*\footnoterule{}

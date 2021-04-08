@@ -1,0 +1,85 @@
+\pdfbookmark[0]{Front page}{label:frontpage}%
+\begin{titlingpage}
+  \newgeometry{top=0cm,bottom=1.2cm,right=0cm,left=0cm}
+
+  \backgroundsetup{
+    scale=1.0,
+    angle=0.0,
+    opacity=1.0,
+    contents={\includegraphics[width=\paperwidth,height=\paperheight]{_institution/aau/background.pdf}}
+  }
+
+  \vspace*{7.5cm}
+  \begin{center}
+    \noindent
+    \color{aaudarkblue}
+    \fboxrule0.2cm
+    \fboxsep-0.2cm
+    \fbox{
+      \colorbox{white}{
+        \makebox[0.85\paperwidth]{
+          \begin{tabular}{@{}p{\paperwidth}@{}}
+            \centerline{
+              \begin{minipage}{0.85\paperwidth}
+                \bigskip
+                \bigskip
+                \smallskip
+                \centering
+                \Huge{\textbf{
+                    \thesistitle
+                  }}
+              \end{minipage}
+            }
+            \centerline{
+              \begin{minipage}{0.85\paperwidth}
+                \bigskip
+                \centering
+                \LARGE{
+                  \thesissubtitle
+                }
+              \end{minipage}
+            }
+            \centerline{
+              \begin{minipage}{0.85\paperwidth}
+                \bigskip
+                \smallskip
+                \centering
+                {\LARGE
+                  \thesisauthor
+                }
+              \end{minipage}
+            }
+            \centerline{
+              \begin{minipage}{0.85\paperwidth}
+                \smallskip
+                \centering
+                {\Large
+                  \programme
+                }
+              \end{minipage}
+            }
+            \centerline{
+              \begin{minipage}{0.85\paperwidth}
+                \bigskip
+                \smallskip
+                \centering
+                {\large
+                  \thesistype
+                }
+                \bigskip
+              \end{minipage}
+            }
+          \end{tabular}
+        }
+      }
+    }
+  \end{center}
+
+  \vfill
+  \begin{figure}[!b]
+    \centering
+    \includegraphics[width=0.25\paperwidth]{_institution/aau/logo_small.pdf}
+  \end{figure}
+\end{titlingpage}
+\restoregeometry
+\backgroundsetup{contents={}}

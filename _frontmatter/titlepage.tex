@@ -1,0 +1,38 @@
+\ifx\titlepageleftcolumnwidth\undefined
+  \newlength{\titlepageleftcolumnwidth}
+  \newlength{\titlepagerightcolumnwidth}
+\fi
+\setlength{\titlepageleftcolumnwidth}{0.5\textwidth-\tabcolsep}
+\setlength{\titlepagerightcolumnwidth}{\textwidth-2\tabcolsep-\titlepageleftcolumnwidth}
+\thispagestyle{empty}
+\noindent%
+\begin{tabular}{@{}ll@{}}
+  \parbox{\titlepageleftcolumnwidth}{
+    \includegraphics[width=\titlepageleftcolumnwidth]{_institution/aau/logo.pdf}
+  } &
+  \vspace*{1cm}
+  \parbox{\titlepagerightcolumnwidth}{\raggedleft\small
+    \textbf{\institutiondepartment} \\
+    \institution                    \\
+    \href{\institutionhomepage}{\institutionhomepage}
+  }\bigskip                         \\
+  \parbox[t]{\titlepageleftcolumnwidth}{\large
+    \textbf{Title:}                 \\\thesistitle\bigskip\par
+    \textbf{Theme:}                 \\\thesistype\bigskip\par
+    \textbf{Author:}                \\\thesisauthor\footnotemark{}\bigskip\par
+    \textbf{Programme:}             \\\programme\bigskip\par
+    \textbf{Supervisor:}            \\\supervisor\bigskip\par
+    \textbf{Page Numbers:}          \\\pageref{LastPage}\bigskip\par
+    \textbf{Submitted:}             \\\today
+  } &
+  \parbox[t]{\titlepagerightcolumnwidth}{%
+    \textbf{Abstract:}\bigskip\par
+    \fbox{\parbox{\titlepagerightcolumnwidth-2\fboxsep-2\fboxrule}{%
+        \input{content/abstract}
+      }}
+      
+  }
+\end{tabular}
+\vfill
+\footnotetext{\href{mailto:\thesisauthormail}{\thesisauthormail}}
+\cleardoublepage
