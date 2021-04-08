@@ -11,11 +11,21 @@
 %%% The document itself
 \begin{document}
 
+%%% Start Roman page numbering (until content)
+\pagenumbering{roman}
+
 %%% Include frontmatter
 \include{_frontmatter/_frontmatter}
 
 %%% Add table of content
 \tableofcontents*
+
+%%% Include preamble
+\include{content/preamble/_preamble}
+
+%%% Resume arabin page numbering for content
+\cleardoublepage
+\pagenumbering{arabic}
 
 %%% Include the main content
 \include{content/_content}
