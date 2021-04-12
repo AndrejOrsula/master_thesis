@@ -84,10 +84,10 @@
 
 
 %%% Set bibliography style
-\bibliographystyle{chicago}
+\bibliographystyle{bibliography/_style/acm.bst}
 % Default to (name, year)
 \renewcommand\cite{\citep}
-% Use only one hyperlink instead of two
+% Use (<author, year>) as one hyperlink instead of (<author>, <year>)
 \makeatletter
 \renewcommand\hyper@natlinkbreak[2]{#1}
 \makeatother
