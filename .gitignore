@@ -287,4 +287,6 @@ TSWLatexianTemp*
 *.code-workspace
 
 # Ignore source SVGs for graphics
-*svg
+*.svg
+# keep SVGs that are used inside readme as a substitute for PDFs
+!**/_readme/*.svg
