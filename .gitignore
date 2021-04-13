@@ -285,3 +285,6 @@ TSWLatexianTemp*
 # Visual Studio Code
 .vscode/*
 *.code-workspace
+
+# Ignore source SVGs for graphics
+*svg
