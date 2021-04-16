@@ -10,17 +10,18 @@
 \capstartfalse%
 \begin{tabular}{@{}ll@{}}
   \parbox{\titlepageleftcolumnwidth}{
-    \includegraphics[width=\titlepageleftcolumnwidth]{_institution/aau/logo.pdf}
+    \centering
+    \includegraphics[width=0.5\titlepageleftcolumnwidth]{_institution/aau/logo.pdf}
   } &
-  \vspace*{1cm}
-  \parbox{\titlepagerightcolumnwidth}{\raggedleft\small
+  \vspace*{0.5cm}
+  \parbox{\titlepagerightcolumnwidth}{\raggedleft
     \textbf{\institutiondepartment} \\
     \institution                    \\
     \href{\institutionhomepage}{\institutionhomepage}
   }\bigskip                         \\
   \parbox[t]{\titlepageleftcolumnwidth}{\large
+    {\centering\textbf{\thesistype} \\\bigskip\par}
     \textbf{Title:}                 \\\thesistitlemultiline\bigskip\par
-    \textbf{Theme:}                 \\\thesistype\bigskip\par
     \textbf{Programme:}             \\\programme\bigskip\par
     \textbf{Author:}                \\\thesisauthor\footnotemark{}\bigskip\par
     \textbf{Supervisor:}            \\\supervisor\bigskip\par
@@ -28,7 +29,7 @@
     \textbf{Submission Date:}       \\\today
   } &
   \parbox[t]{\titlepagerightcolumnwidth}{%
-    \textbf{Abstract:}\bigskip\par
+    {\large\textbf{Abstract:}\bigskip\par}
     \fbox{\parbox{\titlepagerightcolumnwidth-2\fboxsep-2\fboxrule}{%
         \input{content/preamble/abstract}
       }}
