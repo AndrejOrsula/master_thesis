@@ -1,18 +1,11 @@
 \chapter{Related Work}
 
-
-\section{Robotic Grasping}
-
-\subsection{Empirical Approaches}
-
-\subsection{Learning-Based Approaches}
+Robotic manipulation and grasping is a field that has been extensively studied for decades via magnitude of different approaches. This chapter outlines some of the notable methods, while focusing on contributions that employ model-free reinforcement learning due to their relevance for this project.
 
 
-\section{Learning from 3D}
+\section{Analytical Approaches}
 
-\subsection{3D Data Representations}
-\paragraph{Mesh}
-\paragraph{Point Cloud}
-\paragraph{Voxel Grid}
-\paragraph{Octree}
+Analytical approaches determine grasps that satisfy target requirements through kinematic and dynamic formulations \cite{sahbani_overview_2012}. These methods typically analyze the geometry of target object and utilised gripper in order to generate suitable grasp pose, which can then be reached by using a separate motion planner. The approach was introduced by \citet{nguyen_constructing_1987} through formulation of objectives for constructing stable force-closure grasps on polyhedral objects. By modelling objects as triangular mesh or 3D point cloud, force-closure grasps were later extended to remove model restrictions \cite{yun-hui_liu_complete_2004}. Several analytical metrics for estimating the quality of grasps were also introduced over the years to quantify good grasps \cite{roa_grasp_2015}, many of which have found their applicability beyond analytical approaches.
+
+Expert human knowledge of robot in specific task is required and can be used directly to develop these algorithm, which allows it them achieve very efficient operation on a number of selected objects. However, this also introduces a limitation because performance is restricted only to the predicted situations and scalable generalisation to novel objects is often unfeasible due to computation complexity that arises from the number of considered conditions \cite{sahbani_overview_2012}. Moreover, geometric models of objects might not be available before interaction is required. Similarly, partial occlusion of objects in setups with passive perception limits the use of geometrical analysis.
 
