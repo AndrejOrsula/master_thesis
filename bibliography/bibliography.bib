@@ -650,23 +650,55 @@ Publisher: Nature Publishing Group},
 	file = {Springer Full Text PDF:/home/andrej/Zotero/storage/KXVZZK7X/Osa et al. - 2017 - Experiments with Hierarchical Reinforcement Learni.pdf:application/pdf},
 }
 
-@inproceedings{nguyen_review_2019,
-	title = {Review of {Deep} {Reinforcement} {Learning} for {Robot} {Manipulation}},
-	doi = {10.1109/IRC.2019.00120},
-	abstract = {Reinforcement learning combined with neural networks has recently led to a wide range of successes in learning policies in different domains. For robot manipulation, reinforcement learning algorithms bring the hope for machines to have the human-like abilities by directly learning dexterous manipulation from raw pixels. In this review paper, we address the current status of reinforcement learning algorithms used in the field. We also cover essential theoretical background and main issues with current algorithms, which are limiting their applications of reinforcement learning algorithms in solving practical problems in robotics. We also share our thoughts on a number of future directions for reinforcement learning research.},
-	booktitle = {2019 {Third} {IEEE} {International} {Conference} on {Robotic} {Computing} ({IRC})},
-	author = {Nguyen, Hai and La, Hung},
-	month = feb,
-	year = {2019},
-	keywords = {Deep reinforcement learning, Optimization, Reinforcement learning, Robot manipulation, Robot sensing systems, Task analysis, Taxonomy, Training},
-	pages = {590--595},
-	file = {IEEE Xplore Full Text PDF:/home/andrej/Zotero/storage/IBGU5SZJ/Nguyen and La - 2019 - Review of Deep Reinforcement Learning for Robot Ma.pdf:application/pdf},
-}
-
 @inproceedings{henderson_deep_2018,
 	title = {Deep {Reinforcement} {Learning} that {Matters}},
 	abstract = {In recent years, significant progress has been made in solving challenging problems across various domains using deep reinforcement learning (RL). Reproducing existing work and accurately judging the improvements offered by novel methods is vital to sustaining this progress. Unfortunately, reproducing results for state-of-the-art deep RL methods is seldom straightforward. In particular, non-determinism in standard benchmark environments, combined with variance intrinsic to the methods, can make reported results tough to interpret. Without significance metrics and tighter standardization of experimental reporting, it is difficult to determine whether improvements over the prior state-of-the-art are meaningful. In this paper, we investigate challenges posed by reproducibility, proper experimental techniques, and reporting procedures. We illustrate the variability in reported metrics and results when comparing against common baselines and suggest guidelines to make future results in deep RL more reproducible. We aim to spur discussion about how to ensure continued progress in the field by minimizing wasted effort stemming from results that are non-reproducible and easily misinterpreted.},
 	booktitle = {{AAAI}},
 	author = {Henderson, Peter and Islam, Riashat and Bachman, Philip and Pineau, Joelle and Precup, Doina and Meger, D.},
 	year = {2018},
+	file = {Full Text PDF:/home/andrej/Zotero/storage/JFTMHHCN/Henderson et al. - 2018 - Deep Reinforcement Learning that Matters.pdf:application/pdf},
+}
+
+@inproceedings{bousmalis_using_2018,
+	title = {Using {Simulation} and {Domain} {Adaptation} to {Improve} {Efficiency} of {Deep} {Robotic} {Grasping}},
+	url = {https://arxiv.org/abs/1709.07857},
+	urldate = {2021-04-30},
+	author = {Bousmalis, Konstantinos and Irpan, Alex and Wohlhart, Paul and Bai, Yunfei and Kelcey, Matthew and Kalakrishnan, Mrinal and Downs, Laura and Ibarz, Julian and Sampedro, Peter Pastor and Konolige, Kurt and Levine, Sergey and Vanhoucke, Vincent},
+	year = {2018},
+}
+
+@article{zhang_towards_2015,
+	title = {Towards {Vision}-{Based} {Deep} {Reinforcement} {Learning} for {Robotic} {Motion} {Control}},
+	abstract = {This paper introduces a machine learning based system for controlling a robotic manipulator with visual perception only. The capability to autonomously learn robot controllers solely from raw-pixel images and without any prior knowledge of configuration is shown for the first time. We build upon the success of recent deep reinforcement learning and develop a system for learning target reaching with a three-joint robot manipulator using external visual observation. A Deep Q Network (DQN) was demonstrated to perform target reaching after training in simulation. Transferring the network to real hardware and real observation in a naive approach failed, but experiments show that the network works when replacing camera images with synthetic images.},
+	author = {Zhang, Fangyi and Leitner, Juxi and Milford, Michael and Upcroft, Ben and Corke, Peter},
+	month = nov,
+	year = {2015},
+	file = {Full Text PDF:/home/andrej/Zotero/storage/B4YEHQFI/Zhang et al. - 2015 - Towards Vision-Based Deep Reinforcement Learning f.pdf:application/pdf},
+}
+
+@inproceedings{iqbal_toward_2020,
+	title = {Toward {Sim}-to-{Real} {Directional} {Semantic} {Grasping}},
+	doi = {10.1109/ICRA40945.2020.9197310},
+	abstract = {We address the problem of directional semantic grasping, that is, grasping a specific object from a specific direction. We approach the problem using deep reinforcement learning via a double deep Q-network (DDQN) that learns to map downsampled RGB input images from a wrist-mounted camera to Q-values, which are then translated into Cartesian robot control commands via the cross-entropy method (CEM). The network is learned entirely on simulated data generated by a custom robot simulator that models both physical reality (contacts) and perceptual quality (high-quality rendering). The reality gap is bridged using domain randomization. The system is an example of end-to-end (mapping input monocular RGB images to output Cartesian motor commands) grasping of objects from multiple pre-defined object-centric orientations, such as from the side or top. We show promising results in both simulation and the real world, along with some challenges faced and the need for future research in this area.},
+	booktitle = {2020 {IEEE} {International} {Conference} on {Robotics} and {Automation} ({ICRA})},
+	author = {Iqbal, Shariq and Tremblay, Jonathan and Campbell, Andy and Leung, Kirby and To, Thang and Cheng, Jia and Leitch, Erik and McKay, Duncan and Birchfield, Stan},
+	month = may,
+	year = {2020},
+	note = {ISSN: 2577-087X},
+	keywords = {Cameras, Grasping, Grippers, Robot vision systems, Training},
+	pages = {7247--7253},
+	file = {IEEE Xplore Full Text PDF:/home/andrej/Zotero/storage/BUVVCQUY/Iqbal et al. - 2020 - Toward Sim-to-Real Directional Semantic Grasping.pdf:application/pdf},
+}
+
+@article{laskin_reinforcement_2020,
+	title = {Reinforcement {Learning} with {Augmented} {Data}},
+	url = {http://arxiv.org/abs/2004.14990},
+	abstract = {Learning from visual observations is a fundamental yet challenging problem in Reinforcement Learning (RL). Although algorithmic advances combined with convolutional neural networks have proved to be a recipe for success, current methods are still lacking on two fronts: (a) data-efficiency of learning and (b) generalization to new environments. To this end, we present Reinforcement Learning with Augmented Data (RAD), a simple plug-and-play module that can enhance most RL algorithms. We perform the first extensive study of general data augmentations for RL on both pixel-based and state-based inputs, and introduce two new data augmentations - random translate and random amplitude scale. We show that augmentations such as random translate, crop, color jitter, patch cutout, random convolutions, and amplitude scale can enable simple RL algorithms to outperform complex state-of-the-art methods across common benchmarks. RAD sets a new state-of-the-art in terms of data-efficiency and final performance on the DeepMind Control Suite benchmark for pixel-based control as well as OpenAI Gym benchmark for state-based control. We further demonstrate that RAD significantly improves test-time generalization over existing methods on several OpenAI ProcGen benchmarks. Our RAD module and training code are available at https://www.github.com/MishaLaskin/rad.},
+	urldate = {2021-04-30},
+	journal = {arXiv:2004.14990 [cs, stat]},
+	author = {Laskin, Michael and Lee, Kimin and Stooke, Adam and Pinto, Lerrel and Abbeel, Pieter and Srinivas, Aravind},
+	month = nov,
+	year = {2020},
+	note = {arXiv: 2004.14990},
+	keywords = {Computer Science - Machine Learning, Statistics - Machine Learning},
 }
