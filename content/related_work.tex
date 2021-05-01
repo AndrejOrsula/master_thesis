@@ -102,3 +102,11 @@ Another way to combat the issue with lengthy exploration is by introducing conce
 \subsection{Inverse Reinforcement Learning}
 
 As previously mentioned, manual engineering of reward functions for specific tasks is not trivial and can introduce bias. In these situations, inverse reinforcement learning (IRL) can be applied to infer the underlying reward function that a policy is trying to optimise \cite{kroemer_review_2021}. This inference is based on expert demonstrations, whose trajectories contain state-action pair together with the collected reward. IRL differs from imitation learning in that it aims to extract the desired intent of the agent instead of learning how to perform the task. The reward function that is acquired by IRL can subsequently be used to learn a policy that optimises it with RL. However, difficulties with IRL arise because there are infinitely many ways in which a reward function can be inferred for a single policy.
+
+
+\subsection{Curriculum Learning}
+
+Curriculum learning is another approach that addresses the problem with lengthy exploration in complex environments. Instead of learning the entire task from scratch, a curriculum can be designed to present the problem as a sequence of subtasks with increasing difficulty \cite{narvekar_curriculum_2020}. These subtasks usually contain their own reward function, e.g. separate reward for reaching and grasping an object, which results in the notion of composite reward when solving the entire task \cite{popov_data-efficient_2017}. Decomposing tasks in this way is advantageous because skills with shorter horizon are simpler to learn and an agent is more likely to reach the desired state during exploration.
+
+Another way to apply curriculum learning is by first solving a simplified version of the full task, and then progressively scaling the difficulty as agent's success rate increases. \citet{breyer_comparing_2019} applied curriculum learning for several attributes to solve robotic grasping with RL. They progressively increased workspace size, maximum number of objects, initial robot height and the required lift distance. With this approach, they found that curriculum learning can significantly accelerate the training process.
+
