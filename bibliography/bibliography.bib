@@ -601,19 +601,6 @@ Publisher: Nature Publishing Group},
 	file = {Full Text PDF:/home/andrej/Zotero/storage/H6XYUW7U/Islam et al. - 2017 - Reproducibility of Benchmarked Deep Reinforcement .pdf:application/pdf},
 }
 
-@inproceedings{gu_deep_2017,
-	title = {Deep reinforcement learning for robotic manipulation with asynchronous off-policy updates},
-	doi = {10.1109/ICRA.2017.7989385},
-	abstract = {Reinforcement learning holds the promise of enabling autonomous robots to learn large repertoires of behavioral skills with minimal human intervention. However, robotic applications of reinforcement learning often compromise the autonomy of the learning process in favor of achieving training times that are practical for real physical systems. This typically involves introducing hand-engineered policy representations and human-supplied demonstrations. Deep reinforcement learning alleviates this limitation by training general-purpose neural network policies, but applications of direct deep reinforcement learning algorithms have so far been restricted to simulated settings and relatively simple tasks, due to their apparent high sample complexity. In this paper, we demonstrate that a recent deep reinforcement learning algorithm based on off-policy training of deep Q-functions can scale to complex 3D manipulation tasks and can learn deep neural network policies efficiently enough to train on real physical robots. We demonstrate that the training times can be further reduced by parallelizing the algorithm across multiple robots which pool their policy updates asynchronously. Our experimental evaluation shows that our method can learn a variety of 3D manipulation skills in simulation and a complex door opening skill on real robots without any prior demonstrations or manually designed representations.},
-	booktitle = {2017 {IEEE} {International} {Conference} on {Robotics} and {Automation} ({ICRA})},
-	author = {Gu, Shixiang and Holly, Ethan and Lillicrap, Timothy and Levine, Sergey},
-	month = may,
-	year = {2017},
-	keywords = {Heuristic algorithms, Training, Neural networks, Robots, Learning (artificial intelligence), Instruction sets, Safety},
-	pages = {3389--3396},
-	file = {IEEE Xplore Full Text PDF:/home/andrej/Zotero/storage/3LCGAXSA/Gu et al. - 2017 - Deep reinforcement learning for robotic manipulati.pdf:application/pdf;IEEE Xplore Abstract Record:/home/andrej/Zotero/storage/8EM2B3K7/7989385.html:text/html},
-}
-
 @book{kalashnikov_qt-opt_2018,
 	title = {{QT}-{Opt}: {Scalable} {Deep} {Reinforcement} {Learning} for {Vision}-{Based} {Robotic} {Manipulation}},
 	shorttitle = {{QT}-{Opt}},
@@ -720,4 +707,13 @@ Publisher: Nature Publishing Group},
 	month = mar,
 	year = {2020},
 	file = {Full Text PDF:/home/andrej/Zotero/storage/YRXIWFHN/Narvekar et al. - 2020 - Curriculum Learning for Reinforcement Learning Dom.pdf:application/pdf},
+}
+
+@article{plappert_multi-goal_2018,
+	title = {Multi-{Goal} {Reinforcement} {Learning}: {Challenging} {Robotics} {Environments} and {Request} for {Research}},
+	shorttitle = {Multi-{Goal} {Reinforcement} {Learning}},
+	abstract = {The purpose of this technical report is two-fold. First of all, it introduces a suite of challenging continuous control tasks (integrated with OpenAI Gym) based on currently existing robotics hardware. The tasks include pushing, sliding and pick \& place with a Fetch robotic arm as well as in-hand object manipulation with a Shadow Dexterous Hand. All tasks have sparse binary rewards and follow a Multi-Goal Reinforcement Learning (RL) framework in which an agent is told what to do using an additional input. The second part of the paper presents a set of concrete research ideas for improving RL algorithms, most of which are related to Multi-Goal RL and Hindsight Experience Replay.},
+	author = {Plappert, Matthias and Andrychowicz, Marcin and Ray, Alex and McGrew, Bob and Baker, Bowen and Powell, Glenn and Schneider, Jonas and Tobin, Josh and Chociej, Maciek and Welinder, Peter and Kumar, Vikash and Zaremba, Wojciech},
+	month = feb,
+	year = {2018},
 }
