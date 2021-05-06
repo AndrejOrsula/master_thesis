@@ -207,7 +207,7 @@ Another way to apply curriculum learning is by first solving a simplified versio
 
 \section{Deep Learning on 3D Data}
 
-Robotic grasping requires an agent to operate in 3D workspace with 6 DOF. Projections of this space onto 2D RGB or 2.5D RGB-D images can partially represent this data and allow an agent to learn a policy directly from raw pixels. However, there are several other representations in which 3D data can be expressed. Due to the increasing availability of depth-sensing cameras and LiDARs, a number of approaches for leveraging these representations in the context of DL have been proposed in recent years. Combination of such approaches with RL could provide a number of potential benefits over current DRL research that focuses on utilising 2D image observations to learn end-to-end robotic grasping.
+Robotic grasping requires an agent to operate in 3D workspace with 6 DOF. Projections of this space onto 2D RGB or 2.5D RGB-D images can partially represent this data and allow an agent to learn a policy directly from raw pixels. However, there are several other representations in which 3D data can be expressed. Due to the increasing availability of depth-sensing cameras and LiDARs, a number of approaches for leveraging these representations in the context of DL have been proposed in recent years. Combination of such approaches with RL could provide a number of potential benefits over current DRL research that focuses on utilising 2D or 2.5D observations to learn end-to-end robotic grasping.
 
 3D data representations differ mostly in their structure and geometric properties, where Euclidean and non-Euclidean categories provide the main distinction \cite{ahmed_deep_2018}. High-level overview of commonly used 3D data representations is shown in \autoref{fig:3d_data_representations}.
 
@@ -219,9 +219,20 @@ Robotic grasping requires an agent to operate in 3D workspace with 6 DOF. Projec
 \end{figure}
 
 
+\subsection{Non-Euclidean 3D Representations}
+
+The first type encompasses the non-Euclidean approaches that allow data to be stored in an irregular structure. The most popular representations from this category are meshes and point clouds.
+
+
+\paragraph{3D Mesh} Polyhedral models are most often represented with 3D meshes that intuitively describe them in terms of vertices, edges and faces. However, 3D meshes are typically not available a priori for diverse set of real-world objects and constructing them from a single-view RGB-D observation would require extra pre-processing and result in sub-optimal mesh quality. Therefore, DL approaches for processing 3D meshes are not considered in this work.
+
+
+\paragraph{Point Cloud} Geometry of 3D objects and shapes can be approximated by representing them with a point cloud as a set of unstructured 3D points. Furthermore, additional features such as colour and intensity can be added for each point. Despite the effectiveness and availability of point clouds for capturing arbitrary 3D scenes, their irregular structure makes it difficult to process them directly with DL approaches. To enable the use of DL on point clouds, \citet{ruizhongtai_qi_pointnet_2016} proposed PointNet that first preprocesses the unordered input with a spatial transformer network before using a recurrent neural network (RNN) to process the points as a sequential signal, where all extracted point features are then aggregated by max pooling. With this approach, PointNet was successfully applied for classification and segmentation. However, due to aggregation of all points together, PointNet is unable to extract detailed fine-grained patterns from local structures. This was later addressed with PointNet++ \cite{qi_pointnet_2017} by recursively applying PointNet on nested partitions of the input point cloud. Such hierarchical approach of PointNet++ improved the achievable results over PointNet, albeit with significantly worse computational performance.
+
+
 \subsection{Euclidean 3D Representations}
 
-Euclidean 3D data representations have an underlying grid-like structure that allows data to be stored in a regular arrangement. Among others, this category includes RGB-D image, multi-view data and volumetric representations in form of voxel grid and octree.
+Euclidean 3D data representations have an underlying grid-like structure that allows data to be stored in a regular arrangement. Among others, this category includes RGB-D images, multi-view data and volumetric representations in form of voxel grids and octrees.
 
 
 \paragraph{Multi-view Data} The primary limitation of RGB-D images is their 2.5D nature due to the projection that produces them. This in turn limits the information they can store to a single view of the scene, hence occlusions are inevitable. A simple way to mitigate the limitation of single view is by utilising multiple vantage points simultaneously via multi-view data representation. This can be achieved when a scene is perceived by multiple RGB or depth-sensing cameras, or if virtual cameras are used to synthesise projections of the scene. The produced set of images can subsequently be used in the context of DL by individually processing them with a 2D CNN. DRL approach by \citet{gualtieri_learning_2018} applies multi-view data representation in form of three distinct axis-aligned views of the scene, which are combined in order to determine a 3D position via pixel-wise action space for an action primitive that places previously grasped objects. However, multi-view representations might require a large number of views in order to sufficiently describe the available 3D information, which in turn causes computational overhead and can cause over-fitting \cite{ahmed_deep_2018}. Furthermore, their use of 2D CNNs still lacks the required generalisation over depth and spatial orientation \cite{gualtieri_pick_2018}.
@@ -230,28 +241,28 @@ Euclidean 3D data representations have an underlying grid-like structure that al
 \paragraph{Voxel Grid} Similar to 2D images that contain pixels in a regular grid, 3D volume can be subdivided into individual voxels. With this volumetric approach, voxel grids can be used to describe how 3D objects are distributed throughout the scene. Each voxel can either contain a simple occupancy indicator or it can have a number of features such as surface normals and colour channels. Although voxel grids are in many aspects similar to 2D images, they do not suffer from limitations induced by perspective projection and distortion. Furthermore, they are easily extendible to 3D convolutional operations due to their regularity, which gave rise to DL approaches for exploiting the full 3D geometry of objects by using CNNs. With this approach, \citet{wu_3d_2015} and \citet{maturana_voxnet_2015} concurrently introduced 3D ShapeNets and VoxNet designed for classification via shape analysis, where the volumetric 3D representation enabled their CNNs to generalise over shape and spatial orientation of various objects. However, voxel grids are notoriously inefficient because they fully represent both occupied and unoccupied cells. This makes their memory and computational cost grow cubically with increasing voxel resolution, which in turn restricts their use to low resolution voxels. Therefore, 3D ShapeNets and VoxNet used grid size of only 30x30x30 and 32x32x32 binary voxels, respectively.
 
 
-\paragraph{Octree} To mitigate the inefficiency of voxel grids, octrees provide a more compact volumetric representation of 3D data. Their efficiency comes from the ability to vary the size of voxels in the volume according to the object occupancy. It models the 3D representation as a hierarchical tree-like data structure, where each cell can be recursively decomposed into eight child octants. This approach provides octrees with the benefits of volumetric approach, while having a reduced memory and computational cost. The hierarchical structure however increases their complexity and makes it more challenging to parallelise convolutional computations. To address this issue, \citet{wang_o-cnn_2017} proposed O-CNN with a novel octree data structure that is suited for DL parallelisation on GPUs. Instead of simple occupancy, they utilise surface normals in order to preserve smoothness of the objects as visualised in \autoref{fig:rw_ocnn_occupancy_vs_normals}. To further improve computational efficiency, their CNN approach processes only the finest leaf octants, i.e. the smallest possible octants at a certain octree depth that describe the surface of objects. O-CNN has been applied to problems such as shape classification, completion, retrieval and segmentation \cite{wang_o-cnn_2017, wang_deep_2020}.
+\paragraph{Octree} To mitigate the inefficiency of voxel grids, octrees provide a more compact volumetric representation of 3D data. Their efficiency comes from the ability to vary the size of voxels in the volume according to the object occupancy. It models the 3D representation as a hierarchical tree-like data structure, where each cell can be recursively decomposed into eight child octants. This approach provides octrees with the benefits of volumetric approach, while having a reduced memory and computational cost. This quality made octrees popular in robotics applications such as obstacle avoidance. However, the hierarchical structure of octrees increases their complexity and makes it more challenging to parallelise operations such as 3D convolutions for DL. To address this issue, \citet{wang_o-cnn_2017} proposed O-CNN with a novel octree data structure that is suited for DL parallelisation on GPUs, which is encoded with shuffled keys and labels for spatial and hierarchical organisation, respectively. Instead of simple occupancy, they utilise surface normals in order to preserve smoothness of the objects as visualised in \autoref{fig:rw_ocnn_occupancy_vs_normals}. To further improve computational efficiency, their CNN approach processes only the finest leaf octants, i.e. the smallest possible octants at a certain octree depth that describe the surface of objects. O-CNN has been applied to problems such as shape classification, completion, retrieval and segmentation with competitive results \cite{wang_o-cnn_2017, wang_deep_2020}.
 
 \begin{figure}[ht]
     \centering
     \begin{subfigure}[ht]{0.325\textwidth}
         \centering
         \includegraphics[width=1.0\textwidth]{related_work/ocnn_original.png}
-        \caption*{Original mesh.}
+        \caption*{Original mesh}
     \end{subfigure}%
     ~
     \begin{subfigure}[ht]{0.325\textwidth}
         \centering
         \includegraphics[width=1.0\textwidth]{related_work/ocnn_binary.png}
-        \caption*{Occupancy voxel grid.}
+        \caption*{Occupancy voxel grid}
     \end{subfigure}%
     ~
     \begin{subfigure}[ht]{0.325\textwidth}
         \centering
         \includegraphics[width=1.0\textwidth]{related_work/ocnn_normals.png}
-        \caption*{Octree with normals.}
+        \caption*{Octree with normals}
     \end{subfigure}%
-    \caption{Comparison between occupancy voxel grid and smoothness-preserving octree that uses normal vectors as features. Octree is rendered with oriented disks sampled at the finest leaf octants. Smallest cell size is the same for both representations. \protect\cite{wang_o-cnn_2017}}
+    \caption{Comparison between occupancy voxel grid and smoothness-preserving octree that uses normal vector instead of binary indicator. Octree is rendered with oriented disks sampled at the finest leaf octants. Smallest cell size is the same for both representations. \protect\cite{wang_o-cnn_2017}}
     \label{fig:rw_ocnn_occupancy_vs_normals}
 \end{figure}
 
