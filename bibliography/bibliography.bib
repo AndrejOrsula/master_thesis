@@ -900,3 +900,45 @@ Publisher: Nature Publishing Group},
 	keywords = {Computer Science - Artificial Intelligence, Computer Science - Machine Learning},
 	file = {arXiv Fulltext PDF:/home/andrej/Zotero/storage/EVVUEZFJ/Brockman et al. - 2016 - OpenAI Gym.pdf:application/pdf;arXiv.org Snapshot:/home/andrej/Zotero/storage/YS6FZ69M/1606.html:text/html},
 }
+
+@article{lillicrap_continuous_2015,
+	title = {Continuous control with deep reinforcement learning},
+	abstract = {We adapt the ideas underlying the success of Deep Q-Learning to the continuous action domain. We present an actor-critic, model-free algorithm based on the deterministic policy gradient that can operate over continuous action spaces. Using the same learning algorithm, network architecture and hyper-parameters, our algorithm robustly solves more than 20 simulated physics tasks, including classic problems such as cartpole swing-up, dexterous manipulation, legged locomotion and car driving. Our algorithm is able to find policies whose performance is competitive with those found by a planning algorithm with full access to the dynamics of the domain and its derivatives. We further demonstrate that for many of the tasks the algorithm can learn policies end-to-end: directly from raw pixel inputs.},
+	journal = {CoRR},
+	author = {Lillicrap, Timothy and Hunt, Jonathan and Pritzel, Alexander and Heess, Nicolas and Erez, Tom and Tassa, Yuval and Silver, David and Wierstra, Daan},
+	month = sep,
+	year = {2015},
+	file = {Full Text PDF:/home/andrej/Zotero/storage/B45PT363/Lillicrap et al. - 2015 - Continuous control with deep reinforcement learnin.pdf:application/pdf},
+}
+
+@article{fujimoto_addressing_2018,
+	title = {Addressing {Function} {Approximation} {Error} in {Actor}-{Critic} {Methods}},
+	abstract = {In value-based reinforcement learning methods such as deep Q-learning, function approximation errors are known to lead to overestimated value estimates and suboptimal policies. We show that this problem persists in an actor-critic setting and propose novel mechanisms to minimize its effects on both the actor and critic. Our algorithm takes the minimum value between a pair of critics to restrict overestimation and delays policy updates to reduce per-update error. We evaluate our method on the suite of OpenAI gym tasks, outperforming the state of the art in every environment tested.},
+	author = {Fujimoto, Scott and Hoof, Herke and Meger, Dave},
+	month = feb,
+	year = {2018},
+}
+
+@book{haarnoja_soft_2018,
+	title = {Soft {Actor}-{Critic} {Algorithms} and {Applications}},
+	abstract = {Model-free deep reinforcement learning (RL) algorithms have been successfully applied to a range of challenging sequential decision making and control tasks. However, these methods typically suffer from two major challenges: high sample complexity and brittleness to hyperparameters. Both of these challenges limit the applicability of such methods to real-world domains. In this paper, we describe Soft Actor-Critic (SAC), our recently introduced off-policy actor-critic algorithm based on the maximum entropy RL framework. In this framework, the actor aims to simultaneously maximize expected return and entropy. That is, to succeed at the task while acting as randomly as possible. We extend SAC to incorporate a number of modifications that accelerate training and improve stability with respect to the hyperparameters, including a constrained formulation that automatically tunes the temperature hyperparameter. We systematically evaluate SAC on a range of benchmark tasks, as well as real-world challenging tasks such as locomotion for a quadrupedal robot and robotic manipulation with a dexterous hand. With these improvements, SAC achieves state-of-the-art performance, outperforming prior on-policy and off-policy methods in sample-efficiency and asymptotic performance. Furthermore, we demonstrate that, in contrast to other off-policy algorithms, our approach is very stable, achieving similar performance across different random seeds. These results suggest that SAC is a promising candidate for learning in real-world robotics tasks.},
+	author = {Haarnoja, Tuomas and Zhou, Aurick and Hartikainen, Kristian and Tucker, George and Ha, Sehoon and Tan, Jie and Kumar, Vikash and Zhu, Henry and Gupta, Abhishek and Abbeel, Pieter and Levine, Sergey},
+	month = dec,
+	year = {2018},
+}
+
+@inproceedings{kuznetsov_controlling_2020,
+	title = {Controlling {Overestimation} {Bias} with {Truncated} {Mixture} of {Continuous} {Distributional} {Quantile} {Critics}},
+	url = {http://proceedings.mlr.press/v119/kuznetsov20a.html},
+	abstract = {The overestimation bias is one of the major impediments to accurate off-policy learning. This paper investigates a novel way to alleviate the overestimation bias in a continuous control setting. Ou...},
+	language = {en},
+	urldate = {2021-05-09},
+	booktitle = {International {Conference} on {Machine} {Learning}},
+	publisher = {PMLR},
+	author = {Kuznetsov, Arsenii and Shvechikov, Pavel and Grishin, Alexander and Vetrov, Dmitry},
+	month = nov,
+	year = {2020},
+	note = {ISSN: 2640-3498},
+	pages = {5556--5566},
+	file = {Full Text PDF:/home/andrej/Zotero/storage/2B5E5G5Y/Kuznetsov et al. - 2020 - Controlling Overestimation Bias with Truncated Mix.pdf:application/pdf;Snapshot:/home/andrej/Zotero/storage/XZXZL4XW/kuznetsov20a.html:text/html},
+}

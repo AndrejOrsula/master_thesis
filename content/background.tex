@@ -1,1 +1,50 @@
 \chapter{Background}\label{ch:background}
+
+This chapter provides a theoretical overview of RL foundation based on \citet{sutton_reinforcement_2018}, together with specific algorithms relevant to this project. The reader is welcome to skip to the next \autoref{ch:problem_formulation} if these concepts are familiar.
+
+
+\section{Markov Decision Process}
+
+As previously mentioned, the goal of RL agent is to maximize the total reward that is accumulated during a sequential interaction with the environment. This paradigm can be expressed with a classical formulation of Markov decision process (MDP), where \autoref{fig:bg_mdp_loop} illustrates its basic interaction loop. In MDPs, actions of agent within the environment make it traverse different states and receive corresponding rewards. MDP is an extension of Markov chains, with an addition that agents are allowed to select the actions they execute. Both of these satisfy the Markov property, which assumes that each state is only dependent on the previous state, i.e. a memoryless property where each state contains all information that is necessary to predict the next state. Therefore, MDP formulation is commonly used within the context of RL because it captures a variety of tasks that general-purpose RL algorithms can be applied to, including robotic manipulation tasks.
+
+It should be noted that partially observable Markov decision process (POMDP) is a more accurate characterisation of most robotics tasks because the states are commonly unobservable or only partially observable, however, the difficulty of solving POMDPs limits their usage \cite{kroemer_review_2021}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.75\textwidth]{background/mdp_loop.pdf}
+    \caption{The interaction between agent and environment in MDP.~\protect\cite{sutton_reinforcement_2018}}
+    \label{fig:bg_mdp_loop}
+\end{figure}
+
+MDPs are typically described as a tuple \((\mathcal{S}, \mathcal{A}, p, r)\). In this work, the state space \(\mathcal{S}\) and action space \(\mathcal{A}\) are assumed to be continuous. The state transition probabilities are defined by function \(p : \mathcal{S} \times \mathcal{S} \times \mathcal{A} \rightarrow [0, 1]\) that represents the probability density of the next state \(s' \in \mathcal{S}\) based on the current state \(s \in \mathcal{S}\) and action \(a \in \mathcal{A}\).
+\begin{equation}
+    p(s' \vert s, a) = \Pr\{S_{t+1}{=}s' \vert S_t{=}s, A_{t}{=}a\}
+\end{equation}
+
+The behaviour of an agent is defined by a policy \(\pi : \mathcal{S} \rightarrow \mathcal{A}\) that provides a mapping from states to actions. At each discrete time step \(t\), the environment utilises reward function \(r(s_{t}, a_{t})\) to emit a scalar value that expresses the immediate reward \(r_{t} \in \mathbb{R}\) for executing action \(a_{t} \in \mathcal{A}\) in state \(s_{t} \in \mathcal{S}\) with policy \(\pi\). Since both immediate and future rewards must be considered in MDP setting, the return \(G_{t}\) that RL agent seeks to maximise is defined as a sum of discounted rewards
+\begin{equation}
+    G_{t} = \sum\limits_{i=t}^T \gamma^{i-t} r(s_{i}, a_{i}),
+\end{equation}
+where \(\gamma \in [0, 1]\) is a discount factor that determines the priority of long-term future rewards and ensures that return is finite for continuous tasks. \(T\) denotes a final time step, which either indicates the end of episode for episodic tasks or \(T=\infty\) for continuous tasks. Episodic robotic grasping task with a fixed maximum number of time steps is considered in this work.
+
+A value function can be defined to determine the expected return when following a policy \(\pi\) for a particular state \(s\) with value function \(V^{\pi}(s)\). Similarly, an action-value function for taking action \(a\) in state \(s\) and then following policy \(\pi\) can be defined as \(Q^{\pi}(s, a)\).
+\begin{alignat}{2}
+    V^{\pi}(s)    & = \mathbb{E}_{\pi} [G_{t} \vert S_{t}{=}s]            &  & = \mathbb{E}_{\pi} \left[ \sum\limits_{i=t}^T \gamma^{i-t} r(s_{i}, a_{i}) \middle\vert\ S_{t}{=}s \right]            \\
+    Q^{\pi}(s, a) & = \mathbb{E}_{\pi} [G_{t} \vert S_{t}{=}s, A_{t}{=}a] &  & = \mathbb{E}_{\pi} \left[ \sum\limits_{i=t}^T \gamma^{i-t} r(s_{i}, a_{i}) \middle\vert\ S_{t}{=}s, A_{t}{=}a \right]
+\end{alignat}
+
+The primary goal of the agent is to find the optimal policy \(\pi^{*}\) that is better than or equal to all other policies. This can be achieved by estimating the corresponding optimal action-value function \(Q^{*}(s, a)\) for all \(s \in \mathcal{S}\) and \(a \in \mathcal{A}\).
+\begin{equation}
+    Q^{*}(s, a) = \underset{\pi}{max}\ Q^{\pi}(s, a)
+    \label{eq:optimal_action_value_function}
+\end{equation}
+% Therefore, once the optimal action-value function \(Q^{*}(s, a)\) is found, \(\pi^{*}\) can be followed by selecting the optimal action \(a^{*}\) at each state \(s\).
+% \begin{equation}
+%     a^{*}(s) = arg\ \underset{a}{max}\ Q^{*}(s, a)
+% \end{equation}
+
+This optimal action-value function satisfies Bellman equation. Intuitively, Bellman optimality equation for \(Q^{*}(s, a)\) expresses that the value of a state is equal to the expected return for the best action \(a' \in \mathcal{A}\) taken in that state.
+\begin{equation}
+    Q^{*}(s, a) = \mathbb{E} \left[ r_{t+1} + \gamma\ \underset{a'}{max}\ Q^{*}(s_{t+1}, a') \middle\vert\ S_{t}{=}s, A_{t}{=}a  \right]
+\end{equation}
+
