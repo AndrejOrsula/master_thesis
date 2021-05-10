@@ -5,9 +5,9 @@ This chapter provides a theoretical overview of RL foundation based on \citet{su
 
 \section{Markov Decision Process}
 
-As previously mentioned, the goal of RL agent is to maximize the total reward that is accumulated during a sequential interaction with the environment. This paradigm can be expressed with a classical formulation of Markov decision process (MDP), where \autoref{fig:bg_mdp_loop} illustrates its basic interaction loop. In MDPs, actions of agent within the environment make it traverse different states and receive corresponding rewards. MDP is an extension of Markov chains, with an addition that agents are allowed to select the actions they execute. Both of these satisfy the Markov property, which assumes that each state is only dependent on the previous state, i.e. a memoryless property where each state contains all information that is necessary to predict the next state. Therefore, MDP formulation is commonly used within the context of RL because it captures a variety of tasks that general-purpose RL algorithms can be applied to, including robotic manipulation tasks.
+The goal of RL agent is to maximize the total reward that is accumulated during a sequential interaction with the environment. This paradigm can be expressed with a classical formulation of Markov decision process (MDP), where \autoref{fig:bg_mdp_loop} illustrates its basic interaction loop. In MDPs, actions of agent within the environment make it traverse different states and receive corresponding rewards. MDP is an extension of Markov chains, with an addition that agents are allowed to select the actions they execute. Both of these satisfy the Markov property, which assumes that each state is only dependent on the previous state, i.e. a memoryless property where each state contains all information that is necessary to predict the next state. Therefore, MDP formulation is commonly used within the context of RL because it captures a variety of tasks that general-purpose RL algorithms can be applied to, including robotic manipulation tasks.
 
-It should be noted that partially observable Markov decision process (POMDP) is a more accurate characterisation of most robotics tasks because the states are commonly unobservable or only partially observable, however, the difficulty of solving POMDPs limits their usage \cite{kroemer_review_2021}.
+It should be noted that partially observable Markov decision process (POMDP) is a more accurate characterisation of most robotics tasks because the states are commonly unobservable or only partially observable, however, the difficulty of solving POMDPs limits their usage \cite{kroemer_review_2021}. Therefore, this chapter presents only on MPDs.
 
 \begin{figure}[ht]
     \centering
@@ -45,6 +45,13 @@ The primary goal of the agent is to find the optimal policy \(\pi^{*}\) that is 
 
 This optimal action-value function satisfies Bellman equation. Intuitively, Bellman optimality equation for \(Q^{*}(s, a)\) expresses that the value of a state is equal to the expected return for the best action \(a' \in \mathcal{A}\) taken in that state.
 \begin{equation}
-    Q^{*}(s, a) = \mathbb{E} \left[ r_{t+1} + \gamma\ \underset{a'}{max}\ Q^{*}(s_{t+1}, a') \middle\vert\ S_{t}{=}s, A_{t}{=}a  \right]
+    Q^{*}(s, a) = \mathbb{E} \left[ r_{t+1} + \gamma\ \underset{a'}{max}\ Q^{*}(s_{t+1}, a') \middle\vert\ S_{t}{=}s, A_{t}{=}a \right]
 \end{equation}
+
+
+\section{Model-Free Reinforcement Learning}
+
+As previously mentioned, RL algorithms can be categorised into model-based and model-free methods, latter of which is considered in this work. Aside from this classification, there are two additional distinctions among RL algorithms that can be used to categorise them. One of these distinctions is related to the way in which data is collected during the training, separating algorithm into on-policy and off-policy. Last category is based on whether RL algorithm computes a value function or not, which differentiates them into value-based and policy-based RL.
+
+On-policy algorithms are restricted to only use data that is collected by the specific policy that is being optimised during the training. On the contrary, off-policy algorithms can be used to train an agent on any data collected by an arbitrary policy. This distinction has significant impact on RL robot learning with respect to sample efficiency. On-policy algorithms cannot reuse previous data during training because the policy keeps changing with each update. As opposed to this, off-policy RL algorithms can utilise each transition multiple times. For this, replay buffer \cite{mnih_human-level_2015} is commonly used to store transitions when interacting with the environment, which are then used to provide samples for updating the policy. However, on-policy algorithms provide better stability and convergence guarantees during learning than off-policy methods. Despite of possible instability, off-policy algorithms are considered to be more suitable for complex robotic tasks due to their improved sample efficiency.
 
