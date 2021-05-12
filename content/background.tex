@@ -11,7 +11,7 @@ It should be noted that partially observable Markov decision process (POMDP) is 
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.75\textwidth]{background/mdp_loop.pdf}
+    \includegraphics[width=0.667\textwidth]{background/mdp_loop.pdf}
     \caption{The interaction between agent and environment in MDP.~\protect\cite{sutton_reinforcement_2018}}
     \label{fig:bg_mdp_loop}
 \end{figure}
@@ -49,20 +49,21 @@ This optimal action-value function satisfies Bellman equation. Intuitively, Bell
 
 \section{Model-Free Reinforcement Learning}
 
-As previously mentioned, RL algorithms can be categorised into model-based and model-free methods, latter of which are considered in this work. Aside from this classification, there are two additional distinctions among RL algorithms that can be used to categorise them. One of these distinctions is related to the way in which data is collected during the training, separating algorithm into on-policy and off-policy. Last category is based on whether RL algorithm computes a value function or not, which differentiates them into value-based and policy-based RL. Furthermore, RL algorithms apply various exploration strategies in order to balance their trade-off between gaining more knowledge about the environment through exploration and following the current most promising direction via exploitation.
+As previously mentioned, RL algorithms can be categorised into model-based and model-free methods, latter of which are considered in this work. Aside from this classification, there are two additional distinctions among RL algorithms that can be used to categorise them. One of these distinctions is related to the way in which data is collected during the training, separating algorithm into on-policy and off-policy. Last category is based on whether RL algorithm computes a value function or not, which differentiates them into value- and policy-based RL. Furthermore, RL algorithms apply various exploration strategies in order to balance their trade-off between gaining more knowledge about the environment through exploration and following the current most promising direction via exploitation.
 
-On-policy algorithms are restricted to only use data that is collected by the specific policy that is being optimised during the training. On the contrary, off-policy algorithms can be used to train an agent on any data collected by an arbitrary policy. This distinction has significant impact on RL robot learning with respect to sample efficiency. On-policy algorithms cannot reuse previous data during training because the policy keeps changing with each update. As opposed to this, off-policy RL algorithms can utilise each transition multiple times. For this, experience replay buffer \cite{mnih_human-level_2015} is commonly used to store transitions when interacting with the environment, which are then used to provide samples for updating the policy. However, on-policy algorithms generally provide better convergence guarantees during learning than off-policy methods. Despite of possible instability, off-policy algorithms are typically considered to be more suitable for complex robotic tasks due to their improved sample efficiency.
+On-policy algorithms are restricted to only use data that is collected by the specific policy that is being optimised during the training. On the contrary, off-policy algorithms can be used to train an agent on any data collected by an arbitrary policy. This distinction has significant impact on RL robot learning with respect to sample efficiency. On-policy algorithms cannot reuse previous data during training because the policy keeps changing with each update. As opposed to this, off-policy RL algorithms can utilise each transition multiple times. For this, experience replay buffer \cite{mnih_human-level_2015} is commonly used to store transitions when interacting with the environment, which are then used to provide samples for updating the policy. However, on-policy algorithms generally provide better convergence guarantees during learning than off-policy methods. Despite of possible instability, off-policy algorithms are typically considered to be more suitable for complex robotics tasks due to their improved sample efficiency \cite{quillen_deep_2018}.
 
 
-\subsection{Value-Based Methods}
+\subsection{Value-Based Methods}\label{subsec:bg_value_based_methods}
 
 Value-based methods aim to estimate the optimal state-value function~\(V^{*}(s)\) or more commonly the action-value function~\(Q^{*}(s, a)\). Once the optimal action-value function~\(Q^{*}(s, a)\) is found, the optimal policy~\(\pi^{*}\) can be followed by selecting the optimal action~\(a^{*}\) at each state~\(s\).
 \begin{equation}
     a^{*}(s) = arg\ \underset{a'}{max}\ Q^{*}(s, a')
+    \label{eq:value_based_optimal_action_selection}
 \end{equation}
 Such optimisation of value function is often performed off-policy and can therefore utilise experience replay. Unfortunately, these algorithms are incompatible with continuous actions, which limits their applicability for learning robotics tasks that usually require operation in continuous domain. Exception to this are tasks that allow discretisation, e.g.~approaches described in \autoref{sec:rw_reinforcement_learning} that combine pixel-wise action space with action primitives.
 
-Temporal difference (TD) learning is a form of value-based approach in which value function is optimised by minimising TD error~\(\delta\). For action-state value function, this error arises from a notion that the value of current state and selected action~\(Q^{\pi}(s_{t}, a_{t})\) should be equal to the reward that corresponds with this state-action pair~\(r_{t}\), plus the discounted action-value estimate of the next state and best action~\(Q^{\pi}(s_{t+1}, a^{\pi})\) that follows the policy~\(\pi\).
+Temporal difference (TD) learning is a form of value-based approach in which value function is optimised by minimising TD error~\(\delta\). For action-value function, this error arises from a notion that the value of current state and selected action~\(Q^{\pi}(s_{t}, a_{t})\) should be equal to the reward that corresponds with this state-action pair~\(r_{t}\), plus the discounted action-value estimate of the next state and best action~\(Q^{\pi}(s_{t+1}, a^{\pi})\) that follows the policy~\(\pi\).
 \begin{equation}
     \delta_{t} = r_{t} + \gamma\ \underset{a'}{max}\ Q^{\pi}(s_{t+1}, a') - Q^{\pi}(s_{t}, a_{t})
     \label{eq:td_error}
@@ -71,13 +72,14 @@ Temporal difference (TD) learning is a form of value-based approach in which val
 Q-learning uses TD learning and in fact, the TD error for action-value function from \autoref{eq:td_error} is employed by Q-learning. With this error~\(\delta_{t}\), estimating~\(Q^{*}(s_{t}, a_{t})\) becomes an optimisation problem in the following form where~\(\alpha \in (0, 1]\) is the learning rate.
 \begin{equation}
     Q^{*}(s_{t}, a_{t}) \leftarrow Q^{\pi}(s_{t}, a_{t}) + \alpha\delta_{t} = Q^{\pi}(s_{t}, a_{t}) + \alpha \left[ r_{t} + \gamma\ \underset{a'}{max}\ Q^{\pi}(s_{t+1}, a') - Q^{\pi}(s_{t}, a_{t}) \right]
+    \label{eq:q_learning}
 \end{equation}
 
-However, classical Q-learning is inefficient for large environments because it must consider every possible state-action pair in order to determine the optimal~\(Q^{*}(s, a)\), e.g.~by using a tabular approach. Therefore, a general function approximator can be used instead of large tables to solve these inefficiency. In deep Q-learning popularised by \citet{mnih_human-level_2015}, NNs are used to approximate the action-value function~\(Q(s, a)\). Such network can be designed to process a state as the input, and output a value for each possible action. The main difference from classical Q-learning is that optimisation of~\(Q^{*}(s, a)\) is achieved by minimising TD error~\(\delta_{t}\) with respect to parameters~\(\theta\) of the NN. Action that provides the maximum output of the NN for a given state can then be selected for subsequent execution.
+However, classical Q-learning is inefficient for large environments because it must consider every possible state-action pair in order to determine the optimal~\(Q^{*}(s, a)\), e.g.~by using a tabular approach. Therefore, a general function approximator can be used instead of large tables to solve these inefficiency. In deep Q-learning popularised by \citet{mnih_human-level_2015}, NNs are used to approximate the action-value function~\(Q(s, a)\). Such network can be designed to process a state as the input, and output a value for each possible action. The main difference from classical Q-learning is that optimisation of~\(Q^{*}(s, a)\) is achieved by minimising TD error~\(\delta_{t}\) with respect to parameters~\(\theta\) of the NN. Action that provides the maximum output of the NN for a given state can then be selected for subsequent execution. In order to explore different states, a simple \(\epsilon\)-greedy action selection can be employed. With this approach, the agent takes a random action with a probability equal to~\(\epsilon\) and action that follows the current policy~\(\pi\) otherwise.
 
 The benefit of utilising NNs as a function approximator for deep Q-learning is their scalability to larger environments. However, converge to optimal solution can often be difficult to achieve due to instability. Several improvements were therefore proposed over the years to mitigate this issue. An example of improving training stability is by employing target networks \cite{mnih_human-level_2015}, where one network is used for training and a different network is used for computing TD error. This allows the target network with parameters~\(\theta'\) to provide a stable measure of error that does not significantly change on each update of unrelated state-action pairs, which would otherwise be common due to the large number of network parameters. These networks must then be regularly synchronised either via hard update, i.e.~regular copy of parameters at fixed intervals, or by applying a soft update at each step in form of Polyak averaging with hyperparameter~\(\tau \in (0, 1]\).
 \begin{equation}
-    \theta' = \tau \theta + (1-\tau) \theta'
+    \theta' \leftarrow \tau \theta + (1-\tau) \theta'
 \end{equation}
 
 
@@ -92,4 +94,49 @@ Following a policy is therefore based on sampling an action from this distributi
 Policy-based algorithms are typically on-policy and therefore less sample-efficient, yet they have better convergence properties. Furthermore, these algorithms can be directly applied to continuous action spaces without any need for discretisation, which makes them appealing for many robotics problems.
 
 
-\subsection{Actor–Critic Methods}
+\subsection{Actor-Critic Methods}
+
+In contrast to value- and policy-based methods as the two primary categories, actor-critic methods include algorithms that utilise both a parameterised policy, i.e.~actor, and a value function, critic. This is achieved by using separate networks, where the actor and critic can sometimes share some common parameters. Such combination allows actor-critic algorithms to simultaneously possess advantages of both approaches such as sample efficiency and continuous action space. However, These properties have made actor-critic methods popular for robotic manipulation while achieving state of the art performance among other RL approaches in this domain.
+
+Similar to policy-based methods, the actor network learns the probability of selecting a specific action~\(a\) in a given state~\(s\) as ~\(\pi(a \vert s, \theta)\). The critic network estimates action-value function~\(Q(s, a)\) by minimising TD error~\(\delta_{t}\) via \autoref{eq:q_learning}, which is used to critique the actor based on how good the selected action is. This process is visualized in \autoref{fig:bg_actor_critic_loop}. It is however argued that the co-dependence of each other's output distribution can result in instability during learning and make them difficult to tune \cite{quillen_deep_2018}. Despite of this, actor-critic model-free RL algorithms are utilised in this work.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.667\textwidth]{background/actor_critic_loop.pdf}
+    \caption{Overview of actor-critic methods. TD error~\(\delta_{t}\) is used to adjust both critic's action-value function~\(Q(s, a)\) and actor's policy~\(\pi(a \vert s, \theta)\). Adapted from~\protect\citet{sutton_reinforcement_2018}.}
+    \label{fig:bg_actor_critic_loop}
+\end{figure}
+
+
+\section{Actor-Critic Algorithms}
+
+Deep Deterministic Policy Gradient (DDPG), Twin Delayed DDPG (TD3), Soft Actor Critic (SAC) and Truncated Quantile Critics (TQC) are examples of specific actor-critic algorithms that can be applied for robotic grasping with continuous action and observation spaces.
+
+
+\subsection{Deep Deterministic Policy Gradient}
+
+DDPG \cite{lillicrap_continuous_2015} is an actor-critic off-policy algorithm for continuous action space that trains a deterministic policy. It makes use of experience replay buffer and target networks with soft update that were described in \autoref{subsec:bg_value_based_methods}. In addition to the target action-value network, DDPG also utilises a target policy network. In order to accommodate exploration, noise is added to the actions during training.
+
+However, DDPG is notoriously unstable and sensitive to hyperparameters \cite{islam_reproducibility_2017, quillen_deep_2018}, which makes it difficult to apply for complex robotic manipulation tasks. Therefore, additional algorithms and extensions to DDPG have been proposed over the years.
+
+
+\subsection{Twin Delayed Deep Deterministic Policy Gradient}
+
+TD3 \cite{fujimoto_addressing_2018} is an extension to DDPG that aims to improve stability by mitigating overestimation of action-value function. It does this with three extensions. The first change is the use of two individual critics, where the smaller of the two values is used to compute TD error in \autoref{eq:td_error}. The second modification is based on updating actor network less often than critic networks. The last addition includes a smoothing noise for the actor network, which makes it harder for the policy to exploit errors of the critic. Similar to DDPG, exploration during training is encouraged by addition of noise to actions. Together, these three tricks improved performance over original DDPG.
+
+
+\subsection{Soft Actor Critic}
+
+As opposed to DDPG and TD3, SAC \cite{haarnoja_soft_2018} optimises a stochastic policy. It also incorporates the use of two critics as TD3, while also inheriting actor network smoothing noise due to its stochastic nature. The main addition of SAC is the use of entropy regularisation, which makes the policy optimise a trade-off between expected return and entropy, which represents the randomness of the policy. Risk of getting stuck in local minima is therefore decreased, since entropy regularisation has an inherent connection to the exploration strategy because larger entropy results in more exploration.
+
+The objective of optimal policy~\(\pi^{*}\) is therefore changed to include the entropy regularisation term~\(\mathcal{H}(X) = \mathbb{E} [-log P(X)]\).
+\begin{equation}
+    \pi^{*} = arg\ \underset{\pi}{max}\ \mathbb{E}_{\pi} \left[ \sum\limits_{t=0}^T \gamma^{t} \bigg( r(s_{t}, a_{t})  + \alpha \mathcal{H}\big(\pi(\cdot \vert s_{t})\big) \bigg) \right]
+\end{equation}
+Entropy coefficient~\(\alpha\), also called temperature, is a hyperparameter that determines the trade-off between expected return and entropy. This temperature can either be fixed or it can be optimised automatically during the training. With these changes, SAC is by many considered to be state of the art algorithm for continuous control for robotics tasks.
+
+
+\subsection{Truncated Quantile Critics}
+
+TQC \cite{kuznetsov_controlling_2020} is a recent extension to SAC that utilises a distributional representation of multiple critics. The action-value function~\(Q(s, a)\) of critics is modelled as a distribution with~\(n\)-number of atoms. TQC further addresses the overestimation of~\(Q(s, a)\) by truncation of~\textasciitilde8\% topmost atoms from such distributions. With these changes, authors have reported notable performance increase of TQC over SAC on complex robotics tasks.
+
