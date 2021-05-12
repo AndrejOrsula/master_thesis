@@ -21,7 +21,7 @@ MDPs are typically described as a tuple~\((\mathcal{S}, \mathcal{A}, p, r)\). In
     p(s' \vert s, a) = \Pr\{S_{t+1}{=}s' \vert S_{t}{=}s, A_{t}{=}a\}
 \end{equation}
 
-The behaviour of an agent is defined by a policy~\(\pi : \mathcal{S} \rightarrow \mathcal{A}\) that provides a mapping from states to actions. At each discrete time step~\(t\), the environment utilises reward function~\(r(s_{t}, a_{t})\) to emit a scalar value that expresses the immediate reward~\(r_{t} \in \mathbb{R}\) for executing action~\(a_{t}\) in state~\(s_{t}\) with policy~\(\pi\). Since both immediate and future rewards must be considered in MDP setting, the return~\(G_{t}\) that RL agent seeks to maximise is defined as a sum of discounted rewards
+The behaviour of an agent is defined by a policy~\(\pi : \mathcal{S} \rightarrow \mathcal{A}\) that provides a mapping from states to actions. At each discrete time step~\(t\), the environment utilises reward function~\(r(s_{t}, a_{t})\) to emit a scalar value that expresses the immediate reward~\(r_{t} \in \mathbb{R}\) for executing action~\(a_{t}\) in state~\(s_{t}\). Since both immediate and future rewards must be considered in MDP setting, the return~\(G_{t}\) that RL agent seeks to maximise is defined as a sum of discounted rewards
 \begin{equation}
     G_{t} = \sum\limits_{i=t}^T \gamma^{i-t} r(s_{i}, a_{i}),
 \end{equation}
@@ -41,7 +41,7 @@ The primary goal of the agent is to find the optimal policy~\(\pi^{*}\) that is 
     \label{eq:optimal_action_value_function}
 \end{equation}
 
-This optimal action-value function satisfies Bellman equation. Intuitively, Bellman optimality equation for~\(Q^{*}(s, a)\) expresses that the value of a state is equal to the expected return for the best action~\(a'\) taken in that state.
+Optimal action-value function satisfies Bellman equation. Intuitively, Bellman optimality equation for~\(Q^{*}(s, a)\) expresses that the value of a state is equal to the expected return for the best action~\(a'\) taken in that state.
 \begin{equation}
     Q^{*}(s, a) = \mathbb{E} \left[ r_{t+1} + \gamma\ \underset{a'}{max}\ Q^{*}(s_{t+1}, a') \middle\vert\ S_{t}{=}s, A_{t}{=}a \right]
 \end{equation}
@@ -96,9 +96,9 @@ Policy-based algorithms are typically on-policy and therefore less sample-effici
 
 \subsection{Actor-Critic Methods}
 
-In contrast to value- and policy-based methods as the two primary categories, actor-critic methods include algorithms that utilise both a parameterised policy, i.e.~actor, and a value function, critic. This is achieved by using separate networks, where the actor and critic can sometimes share some common parameters. Such combination allows actor-critic algorithms to simultaneously possess advantages of both approaches such as sample efficiency and continuous action space. However, These properties have made actor-critic methods popular for robotic manipulation while achieving state of the art performance among other RL approaches in this domain.
+In contrast to value- and policy-based methods as the two primary categories, actor-critic methods include algorithms that utilise both a parameterised policy, i.e.~actor, and a value function, critic. This is achieved by using separate networks, where the actor and critic can sometimes share some common parameters. Such combination allows actor-critic algorithms to simultaneously possess advantages of both approaches such as sample efficiency and continuous action space. Therefore, these properties have made actor-critic methods popular for robotic manipulation while achieving state of the art performance among other RL approaches in this domain.
 
-Similar to policy-based methods, the actor network learns the probability of selecting a specific action~\(a\) in a given state~\(s\) as ~\(\pi(a \vert s, \theta)\). The critic network estimates action-value function~\(Q(s, a)\) by minimising TD error~\(\delta_{t}\) via \autoref{eq:q_learning}, which is used to critique the actor based on how good the selected action is. This process is visualized in \autoref{fig:bg_actor_critic_loop}. It is however argued that the co-dependence of each other's output distribution can result in instability during learning and make them difficult to tune \cite{quillen_deep_2018}. Despite of this, actor-critic model-free RL algorithms are utilised in this work.
+Similar to policy-based methods, the actor network learns the probability of selecting a specific action~\(a\) in a given state~\(s\) as~\(\pi(a \vert s, \theta)\). The critic network estimates action-value function~\(Q(s, a)\) by minimising TD error~\(\delta_{t}\) via \autoref{eq:q_learning}, which is used to critique the actor based on how good the selected action is. This process is visualized in \autoref{fig:bg_actor_critic_loop}. It is however argued that the co-dependence of each other's output distribution can result in instability during learning and make them difficult to tune \cite{quillen_deep_2018}. Despite of this, actor-critic model-free RL algorithms are utilised in this work.
 
 \begin{figure}[ht]
     \centering
@@ -133,7 +133,7 @@ The objective of optimal policy~\(\pi^{*}\) is therefore changed to include the 
 \begin{equation}
     \pi^{*} = arg\ \underset{\pi}{max}\ \mathbb{E}_{\pi} \left[ \sum\limits_{t=0}^T \gamma^{t} \bigg( r(s_{t}, a_{t})  + \alpha \mathcal{H}\big(\pi(\cdot \vert s_{t})\big) \bigg) \right]
 \end{equation}
-Entropy coefficient~\(\alpha\), also called temperature, is a hyperparameter that determines the trade-off between expected return and entropy. This temperature can either be fixed or it can be optimised automatically during the training. With these changes, SAC is by many considered to be state of the art algorithm for continuous control for robotics tasks.
+Entropy coefficient~\(\alpha\), also called temperature, is a hyperparameter that determines the trade-off between expected return and entropy. This temperature can either be fixed or it can be optimised automatically during the training. With these changes, SAC is by many considered to be state of the art RL algorithm for continuous control.
 
 
 \subsection{Truncated Quantile Critics}
