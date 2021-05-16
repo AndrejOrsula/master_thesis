@@ -1,6 +1,6 @@
 \chapter{Background}\label{ch:background}
 
-This chapter provides a theoretical overview of RL foundation based on \citet{sutton_reinforcement_2018}, together with specific algorithms relevant to this project. The reader is welcome to skip to the next \autoref{ch:problem_formulation} if these concepts are familiar.
+A theoretical overview of RL foundation based on \citet{sutton_reinforcement_2018} is provided in this chapter, together with specific algorithms relevant to this project. The reader is welcome to skip to the next \autoref{ch:problem_formulation} if these concepts are familiar.
 
 
 \section{Markov Decision Process}
@@ -122,7 +122,7 @@ However, DDPG is notoriously unstable and sensitive to hyperparameters \cite{isl
 
 \subsection{Twin Delayed Deep Deterministic Policy Gradient}
 
-TD3 \cite{fujimoto_addressing_2018} is an extension to DDPG that aims to improve stability by mitigating overestimation of action-value function. It does this with three extensions. The first change is the use of two individual critics, where the smaller of the two values is used to compute TD error in \autoref{eq:td_error}. The second modification is based on updating actor network less often than critic networks. The last addition includes a smoothing noise for the actor network, which makes it harder for the policy to exploit errors of the critic. Similar to DDPG, exploration during training is encouraged by addition of noise to actions. Together, these three tricks improved performance over original DDPG.
+TD3 \cite{fujimoto_addressing_2018} is an extension to DDPG that aims to improve stability by mitigating overestimation of action-value function. It achieves this with three extensions. The first change is the use of two individual critics, where the smaller of the two values is used to compute TD error in \autoref{eq:td_error}. The second modification is based on updating actor network less often than critic networks. The last addition includes a smoothing noise for the actor network, which makes it harder for the policy to exploit errors of the critic. Similar to DDPG, exploration during training is encouraged by addition of noise to actions. Together, these three tricks improved performance over original DDPG.
 
 
 \subsection{Soft Actor Critic}
