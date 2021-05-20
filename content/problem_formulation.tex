@@ -46,11 +46,12 @@ The octree structure by \citet{wang_o-cnn_2017} allows arbitrary data to be stor
 
 \subsection{Proprioceptive Observations}
 
-In addition to the visual observations acquired by an RGB-D camera, it is considered to be beneficial to also include proprioceptive observations. Gripper pose and gripper state are used in this work because these observations are independent of the utilised robot. Although both of these could be determined solely from the visual observations, occlusion can introduce significant uncertainness. Furthermore, these readings are easily obtainable from any robot. State of the gripper is represented simply as \(\{opened: 1, closed: -1\}\). The position of the gripper is encoded as \((x,y,z)\) vector represented with respect to robot's base frame. Gripper orientation is also with respect to robot's base frame, and represented as the first two columns of the rotation matrix \([(R_{11},R_{21},R_{31}),(R_{21},R_{22},R_{23})]\) because they provide continuous description of 3D orientation without ambiguities, contrary to quaternions of Euler angles \cite{zhou_continuity_2020}.
+In addition to the visual observations acquired by an RGB-D camera, it is considered to be beneficial to also include proprioceptive observations. Gripper pose and gripper state are used in this work because these observations are independent of the utilised robot. Although both of these could be determined solely from the visual observations, occlusion can introduce significant uncertainness. Furthermore, these readings are easily obtainable from any robot. State of the gripper is represented simply as~\(\{opened: 1, closed: -1\}\). The position of the gripper is encoded as~\((x,y,z)\) vector represented with respect to robot's base frame. Gripper orientation is also with respect to robot's base frame, and represented as the first two columns of the rotation matrix~\([(R_{11},R_{21},R_{31}),(R_{21},R_{22},R_{23})]\) because they provide continuous description of 3D orientation without ambiguities, contrary to quaternions of Euler angles \cite{zhou_continuity_2020}.
 
 
 \subsection{Observation Stacking}
 
+A single set of visual and proprioceptive observations does not fully describe the state of the environment. In order to better satisfy Markov assumption, dynamics of the system must also be observed, including all data based on the temporal information. \citet{mnih_human-level_2015} addressed this in a simple way by stacking last~\(n\) historical observations together and combining them into a single observation that fully describes the state. Despite the increase in the amount of data that needs to be processed, this work applies a similar observation stacking method due to the simplicity of such solution.
 
 
 \section{Action Space}
