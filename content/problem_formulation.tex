@@ -1,10 +1,10 @@
 \chapter{Problem Formulation}\label{ch:problem_formulation}
 
-This chapter systematically formulates the targetted task of robotic grasping as an MDP, while describing the applied reward function alongside the utilised observation and action spaces. The corresponding implementation of such formulation with detailed specifications is covered in the next chapter \autoref{ch:implementation}.
+This chapter systematically formulates the targetted task of robotic grasping as an MDP, while describing the applied reward function alongside the utilised observation and action spaces. The corresponding implementation of such formulation with detailed specifications is covered in the next \autoref{ch:implementation}.
 
 In this work, the agent is assumed to be a high-level controller that provides sequential decision making in form of gripper poses and actions. Therefore, the environment is considered to not only include all objects and the physical interactions between them but also the robot with its actuators and low-level controllers. Episodic formulation of the grasping task is studied in this work, where a new set of objects is introduced into the scene at the beginning of each episode when the environment is reset. During each episode, the aim of the agent is to grasp and lift an object certain height above the ground plane that the objects rest on, which also terminates the current episode. Furthermore, an episode is also terminated after a fixed number of time steps and whenever the agent pushes all objects outside the union of the perceived and reachable workspace. Placing of objects after their picking is not investigated in this work.
 
-Due to the benefits of employing robotics simulators to train RL agents, e.g. safe and inexpensive data collection, robotics simulator will be used in this work to train the agent. Once the agent is trained in a virtual environment, the learned policy will subsequently be evaluated in a real-world setup via sim-to-real transfer. The conceptual setup of this work that should be similar in both domains is illustrated in \autoref{fig:problem_formulation_setup_sketch}.
+Due to the benefits of employing robotics simulators to train RL agents, e.g.~safe and inexpensive data collection, robotics simulator will be used in this work to train the agent. Once the agent is trained in a virtual environment, the learned policy will subsequently be evaluated in a real-world setup via sim-to-real transfer. The conceptual setup of this work that should be similar in both domains is illustrated in \autoref{fig:problem_formulation_setup_sketch}.
 
 \begin{figure}[ht]
     \centering
@@ -34,7 +34,7 @@ Due on these assumptions, the approach that is commonly used in classification a
     \label{fig:problem_formulation_octree_creation_sketch}
 \end{figure}
 
-The octree structure by \citet{wang_o-cnn_2017} allows arbitrary data to be stored at the finest leaf octants. Three distinct features are utilised in this work, namely the average unit normal vector~\(\overline{n}\), the average distance between the centre of the cell and points that formed it~\(\overline{d}\) and the average colour~\(\overline{rgb}\). As illustrated in \autoref{fig:problem_formulation_octree_features}, all of these features are computed independently for each octant based on the points from the point cloud that produced it. Normals~\(n_{i}~{=}~(n_{x_{i}},n_{y_{i}},n_{z_{i}})\) are selected because they provide smoothness-preserving description of the object surfaces, as previously shown in \autoref{fig:rw_ocnn_occupancy_vs_normals}. Since point cloud acquired from RGB-D camera does not usually contain normals, they must be estimated from a local neighbourhood prior to constructing an octree. The average distance to the points~\(\overline{d}\) allows the perceived surface to be offset in the direction of normals, which allows octrees with lower resolution to be used while still preserving smooth transitions between the cells. Colour features~\(rgb_{i}~{=}~(r_{i},g_{i},b_{i})\) are expected to provide an agent with additional input that could allow semantic analysis in addition to shape analysis, which might be especially beneficial for distinguishing dissimilar objects that are in contact. Besides~\(\overline{n}\) being normalised as a unit vector,~\(\overline{d}\) and all channels of~\(\overline{rgb}\) are normalised to be in a range \([0,1]\).
+The octree structure by \citet{wang_o-cnn_2017} allows arbitrary data to be stored at the finest leaf octants. Three distinct features are utilised in this work, namely the average unit normal vector~\(\overline{n}\), the average distance between the centre of the cell and points that formed it~\(\overline{d}\) and the average colour~\(\overline{rgb}\). As illustrated in \autoref{fig:problem_formulation_octree_features}, all of these features are computed independently for each octant based on the points from the point cloud that produced it. Normals~\(n_{i}~{=}~(n_{x_{i}},n_{y_{i}},n_{z_{i}})\) are selected because they provide smoothness-preserving description of the object surfaces, as previously shown in \autoref{fig:rw_ocnn_occupancy_vs_normals}. Since point cloud acquired from RGB-D camera does not usually contain normals, they must be estimated from a local neighbourhood prior to constructing an octree. The average distance to the points~\(\overline{d}\) allows the perceived surface to be offset in the direction of normals, which allows octrees with lower resolution to be used while still preserving smooth transitions between the cells. Colour feature~\(rgb_{i}~{=}~(r_{i},g_{i},b_{i})\) are expected to provide an agent with additional input that could allow semantic analysis in addition to shape analysis, which might be especially beneficial for distinguishing dissimilar objects that are in contact. Besides~\(\overline{n}\) being normalised as a unit vector,~\(\overline{d}\) and all channels of~\(\overline{rgb}\) are normalised to be in a range \([0,1]\).
 
 \begin{figure}[ht]
     \centering
@@ -56,8 +56,16 @@ A single set of visual and proprioceptive observations does not fully describe t
 
 \section{Action Space}
 
-% Mention this here
-% Some problems are better solved with other traditional method instead of RL. (when talking about control of joint vs cartesian pose)
+In this work, the action space for end-to-end robotic grasping comprises of continuous actions in Cartesian space. By utilising actions in Cartesian space instead of joint space, the action space is invariant to the specific kinematic configuration of a robot. Furthermore, Cartesian actions provide better safety guarantees, where traditional IK and motion planning approaches can be employed to reliably provide commands for low-level joint controllers while avoiding self-collisions.
+
+The utilised actions are illustrated in \autoref{fig:problem_formulation_action_space}. For gripper pose, the actions comprise of translational displacement~\((d_{x},d_{y},d_{z})\) and relative rotation around~\(z\)-axis~\(d_{\phi}\) that are both expressed with respect to robot base coordinate frame. These actions are normalised in the range~\([-1, 1]\) and subsequently rescaled to metric and angular units before applying them. The gripper action~\(g\) is also in a continuous range~\([-1, 1]\), where positive values open the gripper and negative values prompt closing of the gripper. Therefore, the RL agent is allowed to take any combination of continuous actions by selecting the corresponding values for a tuple~\((d_{x},d_{y},d_{z},d_{\phi},g)\).
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.33\textwidth]{problem_formulation/action_space.pdf}
+    \caption{Action space of the grasping task, where~\((d_{x},d_{y},d_{z})\) indicates a translational displacement,~\(d_{\phi}\) is a relative yaw rotation, and the gripper closing and opening is denoted by~\(g\).}
+    \label{fig:problem_formulation_action_space}
+\end{figure}
 
 
 \section{Reward Function}
