@@ -138,5 +138,4 @@ Entropy coefficient~\(\alpha\), also called temperature, is a hyperparameter tha
 
 \subsection{Truncated Quantile Critics}
 
-TQC \cite{kuznetsov_controlling_2020} is a recent extension to SAC that utilises a distributional representation of multiple critics. The action-value function~\(Q(s, a)\) of critics is modelled as a distribution with~\(n\)-number of atoms. TQC further addresses the overestimation of~\(Q(s, a)\) by truncation of~\textasciitilde8\% topmost atoms from such distributions. With these changes, authors have reported notable performance increase of TQC over SAC on complex robotics tasks.
-
+TQC \cite{kuznetsov_controlling_2020} is a recent extension to SAC that utilises a distributional representation of multiple critics. The action-value function~\(Q(s, a)\) of critics is modelled as a distribution with~\(n\)-number of atoms. TQC further addresses the overestimation of~\(Q(s, a)\) by truncation of~\textasciitilde\(8\)\% topmost atoms from such distributions. With these changes, authors have reported notable performance increase of TQC over SAC on complex robotics tasks.

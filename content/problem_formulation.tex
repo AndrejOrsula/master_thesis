@@ -51,7 +51,9 @@ In addition to the visual observations acquired by an RGB-D camera, it is consid
 
 \subsection{Observation Stacking}
 
-A single set of visual and proprioceptive observations does not fully describe the state of the environment. In order to better satisfy Markov assumption, dynamics of the system must also be observed, including all data based on the temporal information. \citet{mnih_human-level_2015} addressed this in a simple way by stacking last~\(n\) historical observations together and combining them into a single observation that fully describes the state. Despite the increase in the amount of similar data that needs to be processed, this work applies a similar observation stacking method due to the simplicity of such solution.
+A single set of visual and proprioceptive observations does not fully describe the state of the environment. In order to better satisfy Markov assumption, dynamics of the system must also be observed, including all data based on the temporal information. \citet{mnih_human-level_2015} addressed this in a simple way by stacking last~\(n\) historical observations together and combining them into a single observation that fully describes the state.
+
+Despite the increase in the amount of similar data that needs to be processed, this work applies a similar observation stacking method due to the simplicity of such solution. More specifically, three sequential octrees and proprioceptive observations are stacked together. At the beginning of each episode when three observations are not available yet, the first observations is utilised multiple times to form the stacked observation.
 
 
 \section{Action Space}
@@ -91,6 +93,10 @@ In addition to positive reward for accomplishing the task, the agent is also giv
 \end{table}
 
 
-\section{Curriculum and Demonstrations}
+\section{Demonstrations and Curriculum}
 
+As mentioned in \autoref{sec:rw_reinforcement_learning}, demonstrations and curriculum learning can mitigate issues with lengthy exploration. Both of these concepts are therefore investigated in this work.
 
+\paragraph{Demonstrations} For demonstrations, approach by \citet{kalashnikov_qt-opt_2018} with the use of a scripted policy is applied. Since off-policy RL algorithms with experience replay buffer are employed in this work, the demonstrations can be simply loaded into such buffer at the beginning of training. More specifically, 5000 transitions are loaded into the replay buffer.
+
+\paragraph{Curriculum} Similar to demonstrations, the use of curriculum can improve learning for tasks in complex environment. This work utilises a curriculum that progressively increases the number of spawned objects and the volume in which these objects are spawned based on current success rate, where the full complex task is used after reaching~\(60\)\% based on moving average with~\(n\)~=~\(100\).
