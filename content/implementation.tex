@@ -1,45 +1,70 @@
 \chapter{Implementation}\label{ch:implementation}
 
-
-% % Mention something about reproducibility, and that Docker image was created to easy this
-% On the other hand, reproducibility is an underestimated issue in
-% RL and not many researchers have tried to dig into the issue.
-% It is not easy to reproduce results from many state-of-the-art
-% papers since the implementation details were either missing
-% or incomplete. The situation is even worse when coupled with
-% the instability that RL algorithms currently suffer.
+A concrete implementation of applying DRL for robotic grasping with octree-based observations is presented in this chapter. First, design and creation of a simulated RL environment is described, which is then followed by DRL specifics.
 
 
 \section{Simulation Environment}
 
-\subsection{Selection}
-\paragraph{MuJoCo}
-\paragraph{PyBullet}
-\paragraph{Gazebo Classic}
-\paragraph{Ignition Gazebo}
+As presented in \autoref{sec:rw_reinforcement_learning}, simulations are often used for RL training in order to significantly increase the rate at which data can be collected in a safe manner. In order to implement a virtual setup for training of robotic grasping based on the design from \autoref{ch:problem_formulation}, the simulation must be capable of accurately modelling the physical interactions between a robot and the manipulated objects, with focus on rigid-body dynamics. Furthermore, it must feature a high fidelity rendering of the scene to provide the required visual observations from viewpoint of a virtual RGB-D camera. Therefore, selection of a robotics simulator is of great importance because it directly influences the robustness of sim-to-real transfer and determines the additional steps that must be taken to achieve such transfer.
 
-\subsection{Simulating with Ignition Gazebo}
+
+\subsection{Selection of Robotics Simulator}
+
+There is a variety of simulation tools that could be applied for training RL agents for robotics, some of which are based on video game engines due to their mature state. Generally, there is a trade-off between accuracy, stability and performance that must be considered. Some of the popular simulators for robotics RL research are described here with aim to select one that will be used to implement the environment.
+
+\paragraph{MuJoCo~\protect\cite{todorov_mujoco_2012}} MuJoCo is a physics engine that can accurately model physical interactions. It has been a popular choice for robotics research for years, including RL applications. Unfortunately, MuJoCo is a proprietary software, which has resulted in the decline of its use over the recent years in favour of open-source alternatives. Furthermore, it has limited rendering capabilities.
+
+\paragraph{PyBullet\protect\footnote{\href{https://pybullet.org}{https://pybullet.org}}} PyBullet simulator is built on top of Bullet physics engine. PyBullet is gaining popularity for robotics RL research due to its open-source nature and active development. It provides fast and reliable simulations, albeit the available rendering capabilities are not photorealistic.
+
+\paragraph{Gazebo Classic~\protect\cite{koenig_design_2004}} Gazebo is one of the oldest open-source robotics simulators and it has a large active user-base because it is the primary simulator for the community of Robot Operating System (ROS). Instead of developing everything from scratch, Gazebo is built on top of already existing physics and rendering engines. By default, it utilises ODE physics engine but others such as DART and even Bullet are also supported. For rendering, it makes use of OGRE 1 that unfortunately has limited rendering capabilities.
+
+\paragraph{Ignition Gazebo\protect\footnote{\href{https://ignitionrobotics.org}{https://ignitionrobotics.org}}} Due to the limitations and outdated architecture, Gazebo Classic is planned to be deprecated in favour of Ignition Gazebo, i.e.~the next generation of Gazebo. Although it is in its early development, it supports DART physics engine and has an upcoming support for Bullet. In addition to OGRE 1, PBR rendering is enabled by using OGRE 2, and there is also a partial support for ray tracing with OptiX. Both physics and rendering engines can be loaded during runtime due to the utilised plugin-based architecture. Although little RL robotics research has been conducted with the use of Ignition Gazebo so far, \citet{ferigo_gym-ignition_2020} introduced Gym-Ignition as a framework that simplifies its for RL research.
+
+\paragraph{Isaac\protect\footnote{\href{https://developer.nvidia.com/isaac-sim}{https://developer.nvidia.com/isaac-sim}}} Isaac Sim is a new and promising robotics simulator that is being built on top of Nvidia Omniverse. It utilises PhysX physics engine and has support for state-of-the-art PBR rendering. Isaac Gym\protect\footnote{\href{https://developer.nvidia.com/isaac-gym}{https://developer.nvidia.com/isaac-gym}} is extension of Isaac for RL. One of its significant advantages is that physics computations, rendering as well as rewards can be offloaded to GPU to enable running large number of environments in parallel. Unfortunately, the proprietary nature of Isaac might limit its use and possible customisation. Also, Isaac Gym is still available only as an early access as of May~2021.
+
+
+
+
+\subsection{Environment for Robotic Grasping}
+
+
 \paragraph{Dataset}
-\paragraph{Robot}
-\paragraph{ROS 2 Middleware}
-\paragraph{Motion Planning with MoveIt 2}
+
+\paragraph{Robots}
+
+\paragraph{Middleware}
+
+\paragraph{Motion Planning}
 
 
-\section{OpenAI Gym Environment}
-
-\subsection{Gym-Ignition}
+\subsection{Domain Randomization}
 
 
-\section{Stable Baselines3}
+\subsection{Curriculum and Demonstrations}
 
 
-\section{Network Architecture}
-
-\subsection{PyTorch}
-
-\subsection{Feature Extractor}
-
-\subsection{Actor Critic Networks}
+\subsection{Sim-to-Real}
 
 
-\section{Hyperparameter Optimisation with Optuna}
+
+
+
+\section{Deep Reinforcement Learning}
+
+
+\subsection{Actor-Critic Algorithms}
+
+\paragraph{Stable Baselines 3}
+
+
+\subsection{Network Architecture}
+
+\paragraph{PyTorch}
+
+\subsubsection{Feature Extractor}
+
+
+\subsection{Hyperparameter Optimisation}
+
+\paragraph{Optuna}
+
