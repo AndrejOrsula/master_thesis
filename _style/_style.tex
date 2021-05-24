@@ -25,7 +25,7 @@
 \usepackage{svg}
 \usepackage{svg-extract}
 \usepackage{subcaption}
-
+\usepackage{textcomp}
 
 %%% Define custom colours
 \definecolor{aaudarkblue}{RGB}{33,26,82}
@@ -90,7 +90,8 @@
 \makeatletter
 \renewcommand\hyper@natlinkbreak[2]{#1}
 \makeatother
-
+% Better looking URLs (line breaks)
+\Urlmuskip=0mu plus 1mu
 
 %%% Remove footnote separator
 \renewcommand*\footnoterule{}
