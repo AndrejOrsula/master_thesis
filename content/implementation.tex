@@ -24,7 +24,7 @@ There is a variety of simulation tools that could be applied for training RL age
 
 \bigskip
 
-From the considered robotics simulators, Ignition Gazebo is selected in this work due to the following reasons. Compared to MuJoCo that requires a license, it is open-source, which significantly encourages reproducibility. Although Isaac might be a very promising choice for robotics RL research in the future, it is still under development and its proprietary nature could make it difficult to extend for the needs of this work. PyBullet is currently considered to be a one of the best open-source options due to its maturity and a large amount of RL research that has already been conducted with it. However, it lacks PBR rendering capabilities that are already part of Ignition Gazebo. Furthermore, the plugin-based architecture of Ignition Gazebo simplifies addition of new physics engine, where Bullet support is already pending. Its ability to switch between various physics engines during run-time could eventually provide Ignition Gazebo with one of the best physics-based domain randomisation, as it would not only allow randomising the physics parameters but also of the entire physics implementation. The major disadvantage of the selected Ignition Gazebo robotics simulator is its relatively early stage and a very limited amount of RL-specific research conducted with it. Despite of this, the full availability of its source code makes it possible to extend where needed. Gazebo Classic was excluded from this considerations due to its planned deprecation.
+From the considered robotics simulators, Ignition Gazebo is selected in this work due to the following reasons. Compared to MuJoCo that requires a license, it is open-source, which significantly encourages reproducibility. Although Isaac might be a very promising choice for robotics RL research in the future, it is still under development and its proprietary nature could make it difficult to extend for the needs of this work. PyBullet is currently considered to be a one of the best open-source options due to its maturity and a large amount of RL research that has already been conducted with it. However, it lacks PBR rendering capabilities that are already part of Ignition Gazebo. Furthermore, the plugin-based architecture of Ignition Gazebo simplifies addition of new physics engine, where Bullet support is already pending. Its ability to switch between various physics engines during run-time could eventually provide Ignition Gazebo with one of the best physics-based domain randomisation, as it would not only allow randomising the physics parameters but also of the entire physics implementation. The major disadvantage of the selected Ignition Gazebo robotics simulator is its relatively early stage and a very limited amount of RL research conducted with it. Despite of this, the full availability of its source code makes it possible to extend where needed. Gazebo Classic was excluded from this considerations due to its planned deprecation.
 
 Therefore, Ignition Gazebo is used to create an environment for robotic grasping with RL. For the physics engine, the default option of DART is kept unchanged. For rendering engine, OGRE~2 is selected due to its PBR capabilities. Gym-Ignition \cite{ferigo_gym-ignition_2020} is utilised because it simplifies interaction with Ignition Gazebo with focus on RL research. Furthermore, Gym-Ignition facilitates the process of exposing OpenAI Gym interface for the environments, which provides a standardised form that makes environments compatible with most RL frameworks that contain implementations of algorithms.
 
@@ -59,12 +59,12 @@ Manufacturers of these robots and grippers provide associated 3D CAD models of i
 
 With this information, description that uses Simulation Description Format (SDF) compatible with Ignition Gazebo was created for both robots \cite{orsula_manipulators_2021}. A simplification for the sweeping-parallel RG2 gripper was made in order to provide better a stability. It was modelled by using a single actuated revolute joint per finger, whereas the full model would use three additional passive joints on each finger. Parallel gripper for Panda is modelled with two prismatic joints, i.e.~one for each finger.
 
-\paragraph{Motion Planning} To control the motion of both robots, a joint trajectory controller described in \hyperref[app:joint_trajectory_controller]{appendix~\ref*{app:joint_trajectory_controller}} was implemented for Ignition Gazebo. It follows trajectories that are generated in Cartesian space by the use of MoveIt~2\footnote{\href{https://moveit.ros.org}{https://moveit.ros.org}} motion planning framework. In this framework, the default configuration of TRAC-IK \cite{beeson_trac-ik_2015} and RRTConnect \cite{kuffner_rrt-connect_2000} were used for solving kinematics and motion planning, respectively. An advantage of utilising MoveIt~2 is that a single interface can be used to control both simulated and real robots during sim-to-real transfer, however, this feature was not utilised in this work.
+\paragraph{Motion Planning} To control the motion of both robots, a joint trajectory controller described in \hyperref[app:joint_trajectory_controller]{appendix~\ref*{app:joint_trajectory_controller}} was implemented for Ignition Gazebo. It follows trajectories that are generated in Cartesian space by the use of MoveIt~2\footnote{\href{https://moveit.ros.org}{https://moveit.ros.org}} motion planning framework. In this framework, the default configuration of TRAC-IK \cite{beeson_trac-ik_2015} and RRTConnect \cite{kuffner_rrt-connect_2000} were used for solving kinematics and motion planning, respectively. An advantage of utilising MoveIt~2 is that a single interface can be used to control both simulated and real robots during sim-to-real transfer, however, this feature is not applied in this work.
 
 
 \subsubsection{RGB-D Perception}
 
-In order to acquire visual observations from the environment, a virtual RGB-D camera is utilised. Using OGRE~2 rendering engine, it provides aligned RGB image and depth map simultaneously. For both, the resolution is set to~\(256{\times}256\)~px with a field of view (FoV) of~\(52\)\textdegree. Framerate of the camera is set to~\(10\)~Hz. Gaussian noise with~\(\mu{=}0\) and~\(\sigma{=}0.001\) is added to both RGB and depth data in order to slightly increase the realism of observations. The effect of this when compared to real observation is shown in \autoref{fig:rgbd_camera_noise}.
+In order to acquire visual observations from the environment, a virtual RGB-D camera is utilised. Using OGRE~2 rendering engine, it provides aligned RGB image and depth map simultaneously. For both, the resolution is set to~\(256{\times}256\)~px with a field of view (FoV) of~\(52\)\textdegree. Framerate of the camera is set to~\(10\)~Hz. Gaussian noise with~\(\mu{=}0\) and~\(\sigma{=}0.001\) is added to both RGB and depth data in order to slightly increase the realism of observations. The effect of this when compared to real observation is shown in \autoref{fig:rgbd_camera_noise} on point cloud. Since the pose of camera is known with respect to the robot, the acquired point cloud is then transformed into the robot base coordinate frame.
 
 \begin{figure}[ht]
     \centering
@@ -87,20 +87,20 @@ Dataset of scanned objects by \citet{googleresearch_google_2020} was selected fo
     \centering
     \begin{subfigure}[ht]{0.792\textwidth}
         \begin{flushleft}%
-            % \includegraphics[width=0.995\textwidth]{implementation/training.png}
+            \includegraphics[width=0.995\textwidth]{implementation/training.png}
         \end{flushleft}%
     \end{subfigure}%
     \vrule~%
     \begin{subfigure}[ht]{0.198\textwidth}
         \begin{flushright}%
-            % \includegraphics[width=0.995\textwidth]{implementation/testing.png}
+            \includegraphics[width=0.995\textwidth]{implementation/testing.png}
         \end{flushright}%
     \end{subfigure}%
     \caption{Training (left) and testing (right) datasets of diverse scanned objects that are utilised in the simulated RL grasping environment. Collection is provided by \citet{googleresearch_google_2020}.}
     \label{fig:dataset}
 \end{figure}
 
-All of these objects contain only their corresponding mesh geometry but lack all other properties. Inertial properties were therefore estimated from their geometry in a procedure that is similar to the aforementioned robot models. Mass of each object used during such estimation was randomly selected alongside other properties of the model, which is detailed below in \autoref{sec:impl_domain_randomisation}. This also include the scale of their geometry, as many of these objects would be too large to fit inside the utilised grippers.
+All of these objects contain only their corresponding mesh geometry and material texture but lack all other properties. Inertial properties were therefore estimated from their geometry in a procedure that is similar to the aforementioned robot models. Mass of each object used during such estimation was randomly selected alongside other properties of the model, which is detailed below in \autoref{sec:impl_domain_randomisation}. This also include the scale of their geometry, as many of these objects would be too large to fit inside the utilised grippers.
 
 The 3D scanned objects contain meshes with a very high resolution, which makes them unsuitable for computing physical interactions due to the enormous computational cost it would bring. Therefore, a low resolution copy of each mesh is created for use as a collision geometry, alongside the original mesh that is kept for visual appearance. Such copy is automatically generated for each model by simplifying the original mesh geometry though decimation procedure based quadric error metrics by \citet{garland_surface_1997}. The algorithm was configured to reduce the geometry to~\(2.5\)\% of the original faces, which was afterward clipped to the range between~\([8,400]\) faces in order to avoid outliers.
 
@@ -113,22 +113,43 @@ Having a performant simulation accelerates the data collection, which can in tur
 
 \paragraph{Larger Simulation Step Size} As previously mentioned, dynamic properties of robot joints were manually tuned in order to obtain stable manipulation across a variety of control frequencies. The primary purpose of this tuning is to allow the use of larger simulation step size, which determines the rate at which simulation progresses. This in turn affects the accuracy of physics as well as the frequency of low-level controller. A step size of~\(4\)~ms is used for the grasping environment because it was found to have a balanced trade-off between physics stability and performance.
 
+\bigskip
+
 With performance in mind, the control rate of RL agent is set to a lower frequency of~\(2.5\)~Hz. This is because the agent only provides high-level control, whereas the motion planner and low-level joint controllers take care of interactions that require faster reaction times.
 % TODO: Add RTF (test_env)
 
 
 \subsection{Domain Randomisation}\label{sec:impl_domain_randomisation}
 
+Even though the simulation environment uses objects with realistic appearance and PBR-capable rendering engine, domain randomisation can still provide advantages for sim-to-real transfer as described in \autoref{subsec:sim2real}. Therefore, domain randomisation is applied for several properties at each reset of the environment, i.e.~before the beginning of each episode. Unless otherwise state, uniform distribution is used for sampling of random variables.
+
+\paragraph{Random Objects} At each reset, a number of random objects from the utilised dataset is spawned. Each object is first randomly and uniformly scaled, such that its longest side is between~\(12.5\) and~\(17.5\)~cm. Hereafter, object's inertial properties are recomputed to account for the new scale, while also randomising its mass to be in range~\([0.05, 0.5]\)~kg. Lastly, the coefficient of friction for the object is randomised in range~\([0.75, 1.5]\). In this way, visual, inertial and mechanical properties of each object are random for every episode.
+
+\paragraph{Random Pose of Objects} Besides randomising the type and attributes of each object, the pose at which they spawn is also randomised. It is randomly sampled for each object from a predefined volume in 3D space. In case two objects are overlapping, one of them is spawned again with a new unique pose.
+
+\paragraph{Random Ground Plane Material Textures} To further randomize visuals of the environment at each reset, a random material texture is given to the ground plane on top of which objects are spawned. Similar to the objects,~\(100\) different PBR materials are used with a split of~\(80{/}20\) for training and testing, respectively. PBR materials are used, therefore, each of them uses four different texture maps, i.e.~albedo, normal, specular and roughness.
+
+\paragraph{Random Camera Pose} In order to further increase variety in observations and provide invariance to camera pose, it is randomised at each reset. The pose of the camera is randomly sampled from an arc around the centre of workspace, except for~\(\pm22.5\)\textdegree behind the robot in order to avoid complete occlusion of the scene. Thereafter, a random height for the camera in a range~\([0.1,0.7]\)~m is selected. The camera is then oriented towards the workspace centre and placed~\(1\)~m away from it. This step is expected to provide significant benefits for sim-to-real transfer by allowing camera to be positioned in a location that is suitable for the real-world setup, instead of trying to reproduce simulation setup as closely as possible.
+
+\paragraph{Random Initial Joint Configuration} Finally, the initial joint configuration of the utilised robot is randomised. At the beginning of each episode, Gaussian noise with~\(\mu{=}0\) and~\(\sigma{=}6\)\textdegree is added to each joint in the default configuration.
+
+Examples of fully randomised episodes are shown in \autoref{fig:impl_domain_randomisation}. The aim of this variety in observations is to enable sim-to-real transfer that would allow agent to achieve similar degree of success rate in real-world domain after training only in the simulation
+
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=1.0\textwidth]{implementation/domain_randomisation.png}
+    \caption{Examples of domain randomisation applied to the implemented simulated environment for robotic grasping.}
+    \label{fig:impl_domain_randomisation}
+\end{figure}
 
 
-\subsection{Curriculum and Demonstrations}
+\subsection{Demonstrations and Curriculum}
 
+As mentioned in \autoref{sec:rw_reinforcement_learning}, demonstrations and curriculum learning can mitigate issues with lengthy exploration. Both of these concepts are therefore investigated in this work and implemented in the following way.
 
+\paragraph{Demonstrations} For demonstrations, approach by \citet{kalashnikov_qt-opt_2018} with the use of a scripted policy is applied. Since off-policy RL algorithms with experience replay buffer are employed, the demonstrations can be simply loaded into such buffer at the beginning of training. More specifically,~\(5000\) transitions are loaded into the replay buffer. The scripted policy is described in \hyperref[app:scripted_policy]{appendix~\ref*{app:scripted_policy}}.
 
-\subsection{Sim-to-Real}
-
-
-
+\paragraph{Curriculum} Similar to demonstrations, the use of curriculum can improve learning for tasks in complex environment. This work utilises a curriculum that progressively increases the number of spawned objects and area on top of which these objects are spawned based on current success rate determined by moving average with~\(n\)~=~\(100\). The spawn area increases linearly from~\(2.4{\times}2.4\)~cm at~\(0\)\% success to~\(24{\times}24\)~cm at success rate of~\(60\)\%. Similarly, training begins with a single object, with an addition of extra object every~\(20\)\% until reaching a maximum of four objects at~\(60\)\% success rate.
 
 
 

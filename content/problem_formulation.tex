@@ -91,12 +91,3 @@ In addition to positive reward for accomplishing the task, the agent is also giv
     \caption{Overview of the reward function that is utilised in this work for the grasping task, where~\(r_{exp}\)~=~\(7\) was tuned and each episode has at most 100 time steps.}
     \label{tab:reward_function}
 \end{table}
-
-
-\section{Demonstrations and Curriculum}
-
-As mentioned in \autoref{sec:rw_reinforcement_learning}, demonstrations and curriculum learning can mitigate issues with lengthy exploration. Both of these concepts are therefore investigated in this work.
-
-\paragraph{Demonstrations} For demonstrations, approach by \citet{kalashnikov_qt-opt_2018} with the use of a scripted policy is applied. Since off-policy RL algorithms with experience replay buffer are employed in this work, the demonstrations can be simply loaded into such buffer at the beginning of training. More specifically, 5000 transitions are loaded into the replay buffer.
-
-\paragraph{Curriculum} Similar to demonstrations, the use of curriculum can improve learning for tasks in complex environment. This work utilises a curriculum that progressively increases the number of spawned objects and the volume in which these objects are spawned based on current success rate, where the full complex task is used after reaching~\(60\)\% based on moving average with~\(n\)~=~\(100\).

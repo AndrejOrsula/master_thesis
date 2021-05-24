@@ -34,6 +34,8 @@
 %%% Include bibliography
 \bibliography{bibliography/bibliography, bibliography/bibliography_manual}
 
+%%% Fix numbering for figures in the appendix
+\renewcommand\thefigure{\thesection.\arabic{figure}}
 %%% Include appendices
 \include{content/appendix/_appendix}
 
