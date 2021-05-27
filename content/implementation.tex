@@ -152,24 +152,66 @@ As mentioned in \autoref{sec:rw_reinforcement_learning}, demonstrations and curr
 \paragraph{Curriculum} Similar to demonstrations, the use of curriculum can improve learning for tasks in complex environment. This work utilises a curriculum that progressively increases the number of spawned objects and area on top of which these objects are spawned based on current success rate determined by moving average with~\(n\)~=~\(100\). The spawn area increases linearly from~\(2.4{\times}2.4\)~cm at~\(0\)\% success to~\(24{\times}24\)~cm at success rate of~\(60\)\%. Similarly, training begins with a single object, with an addition of extra object every~\(20\)\% until reaching a maximum of four objects at~\(60\)\% success rate.
 
 
-
-
 \section{Deep Reinforcement Learning}
 
+The implementation of DRL in this work focuses on integration of octree-based feature extraction for solving vision-based robotic grasping. A framework for DRL is first selected, which is then followed by description of the architecture of the feature extractor and network for actor and critics. Lastly, the applied process of hyperparameter optimisation is presented.
 
 
-\subsection{Actor-Critic Algorithms}
+\subsection{Framework for Reinforcement Learning}
 
-\paragraph{Stable Baselines 3}
+It can be very time-consuming and error-prone to implement DRL algorithms from scratch due to several issues that could arise. Therefore, a framework with pre-existing implementations of the utilised actor-critic algorithms from \autoref{sec:bg_actor_critic_algorithms}, i.e.~TD3, SAC and TQC, is utilised. After a brief investigation of the available frameworks for model-free RL, Stable Baselines3 (SB3) by \citet{raffin_stable-baselines3_2019} was selected due to its reliable implementation of the utilised algorithms, open-source nature and active development. Underneath, SB3 utilises PyTorch \cite{paszke_pytorch_2019} as a machine learning backend that enables training of NNs via its automatic differentiation engine.
 
-\paragraph{PyTorch}
+In order to enable octree-based feature extraction, the SB3 implementation of algorithms was extended with few modifications. These primarily consisted of support for octrees inside replay buffer, formation of octree batches and integration of the octree-based feature extractor with NNs of actor and critics. All other configuration of the algorithms was performed through their hyperparameters.
 
 
 \subsection{Feature Extraction}
 
+With visual features, the first part of the network can often be considered as a feature extractor that transforms raw data into more abstract features. This fact is often employed in network architectures for actor-critic DRL methods, where a feature extractor CNN network is shared between the actor and critics. This work therefore utilises the same approach, where a common feature extractor transforms raw input into features that are then provided as input for actor and critic networks. To extract features from octrees, O-CNN implementation by \cite{wang_o-cnn_2017} is used as a base for the employed feature extractor.
+
+
+\subsubsection{Construction of Octree}
+
+First, an octree is constructed from the aforementioned transformed point cloud of the scene during each step. For this, a volume of~\(24{\times}24{\times}24\)~cm is defined to be the observable workspace as a space that is coincidental with the workspace of the robot. Therefore, each point cloud is cropped to occupy only this volume in order to preserve assumption about volumetric 3D data representations from \autoref{subsec:problem_formulation_octree}.
+
+Maximum depth of the octree was selected as~\(d_{max}\)~=~\(4\) in order to provide metric resolution of each finest leaf octant of~\(1.5{\times}1.5{\times}1.5\)~cm. This depth was found to provide enough detail for grasping of objects from the utilised dataset, while not slowing down the training due enormous number of cells. Every octree therefore contains a theoretical maximum of~\(4096\) cells, however, an average of~\(13\)\% of these cells are occupied at any given time in the created simulation environment. This is primarily because only a single view of the scene is used, where each occlusion prohibits the formation of new cells in the occluded regions behind the visible surfaces. Therefore, it is expected that for each additional depth, the workspace volume can be increased eightfold for the utilised dataset while the actual number of occupied cells would be increased at a much slower rate.
+
+As it was previously described in \autoref{subsec:problem_formulation_octree}, each occupied finest leaf octant contains the average unit normal vector~\(\overline{n}\), the average distance between the centre of the cell and points that formed it~\(\overline{d}\) and the average colour~\(\overline{rgb}\). All of these features are extracted directly from the point cloud that is used to create the octree, where each octet considers only the points that belong to its volume. Since the cropped point cloud does not contain normals, these are estimated for each point from their nearest neighbourhood, where maximum of~\(10\) closest neighbours at a maximum distance of~\(5\)~cm are considered. Position of the camera is then used to orient all normals correctly. Once these are found, an octree is created from the point cloud by hierarchical subdivision of the cells. An example of created octree is visualised in \autoref{fig:octree_visualisation}.
+
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=1.0\textwidth]{implementation/octree_visualisation.pdf}
+    \caption{Octree that created from a corresponding point cloud of the scene. In this visualisation, each finest leaf octet is represented as a square that is oriented by~\(\overline{n}\) and offset from the centre of the octet by~\(\overline{d}\). Furthermore, each octet is colourised with its corresponding~\(\overline{rgb}\) feature.}
+    \label{fig:octree_visualisation}
+\end{figure}
+
+
+\subsubsection{Network Architecture of Feature Extractor}
+
+After octrees are created, NN can use them to extract abstract visual features about the environment. Due to the popularity of CNN architectures for image-based DL, 3D octree-based CNN is employed in this work with. In order to incorporate proprioceptive observations from \autoref{subsec:problem_formulation_proprioceptive_observations}, these are processed only slightly and concatenated with the features extracted from octrees. The developed architecture of the network is represented in \autoref{fig:feature_extractor_architecture}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{implementation/feature_extractor.pdf}
+    \caption{Architecture of the octree-based CNN feature extractor. Auxiliary features from proprioceptive observations are concatenated to features extracted from octrees in order to provide a single output feature vector.}
+    \label{fig:feature_extractor_architecture}
+\end{figure}
+
+The network begins with processing octrees at the maximum depth~\(d\)~=~\(d_{max}\)~=~\(4\). Each octree contains seven channels, which encompass the aforementioned features. From this depth, the octree is processed through a series of 3D convolutions, ReLU (Rectified Linear Unit) activation function and maximum pooling. After each pooling operation, the depth of the octree is decremented such that next convolutional layer computes features that are at a larger scale. This series of modules is applied twice, such that the depth of the octree is reduced to~\(d\)~=~\(2\). While doing so, the dimensionality of channels is increased to provide a wider feature space. However, it is necessary to reduce the number of channels before the next step. For this, 1D convolution is applied in order to compress the feature space by combining together features from the different channels for each cell. Once the dimensionality is reduced, the octree is voxelised in order to acquire a structure that has a static size regardless on the input, which enables use of more traditional DL layers. It is achieved by padding the octree at~\(d\)~=~\(2\) with zeros wherever a cell is not already occupied. Once voxelised, the feature space is flattened into a feature vector that is then processed by a single fully connected layer followed by ReLU activation in order to provide the final set of features from octree observations.
+
+The proprioceptive observations are also processed by the same feature extractor. However, only a single linear layer with ReLU activation and the same dimensionality is used because these features are already at a higher level, when compared to the raw octrees. Hereafter, the features extracted from octree are combined with proprioceptive features into a single feature vector that can then be used by actor and critics. The number of utilised channels and the dimensionality of feature vectors is presented in \autoref{fig:feature_extractor_architecture}, which results in total of 226,384 learnable parameters.
+% TODO: verify number of parameters
+
 
 \subsection{Actor-Critic Network Architecture}
 
+\autoref{fig:actor_critic_network} shows ...
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{implementation/actor_critic_network_full.pdf}
+    \caption{Network architecture that is used in this work for all utilised actor-critic algorithms. The architecture of feature extractor is detailed in \protect\autoref{fig:feature_extractor_architecture}.}
+    \label{fig:actor_critic_network}
+\end{figure}
 
 \subsection{Hyperparameter Optimisation}
 
