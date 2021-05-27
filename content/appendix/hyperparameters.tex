@@ -1,1 +1,28 @@
 \section{Hyperparameters}\label{app:hyperparameters}
+
+Hyperparameters used for the created environment for robotic grasping are listed below for TD3, SAC and TQC actor-critic algorithms.
+
+\capstartfalse%
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l|ccc}
+        \textbf{Hyperparameter}     & \textbf{TD3}               & \textbf{SAC}   & \textbf{TQC}                               \\ \hline
+        Optimisation Algorithm      & \multicolumn{3}{c}{\begin{tabular}[c]{@{}c@{}}Adam \cite{kingma_adam_2014}\end{tabular}} \\
+        Learning Rate Schedule      & \multicolumn{3}{c}{Linear, \(1.5 \cdot 10^{-4} \rightarrow 0\)}                          \\
+        Mini-batch Size             & \multicolumn{3}{c}{\(32\)}                                                               \\
+        Update Frequency            & \multicolumn{3}{c}{After Each Episode}                                                   \\
+        Gradient Steps per Update   & \multicolumn{3}{c}{\(100\)}                                                              \\
+        Replay Buffer Size          & \multicolumn{3}{c}{\(40000\)}                                                            \\
+        Discount Factor \(\gamma\)  & \multicolumn{3}{c}{\(0.999\)}                                                            \\
+        Target Update Rate \(\tau\) & \multicolumn{3}{c}{\(5 \cdot 10^{-5}\)}                                                  \\
+        Number of Critics           & \multicolumn{3}{c}{\(2\)}                                                                \\
+        Activation Function         & \multicolumn{3}{c}{ReLU}                                                                 \\
+        Exploratory Action Noise    & \multicolumn{3}{c}{\(\mathcal{N}(0, 0.025)\)}                                            \\ \hline
+        Target Policy Noise         & \(\mathcal{N}(0, 0.25)\)   & ---            & ---                                        \\ \hline
+        Initial Entropy Coefficient & ---                        & \multicolumn{2}{c}{\(0.1\)}                                 \\
+        Entropy Target              & ---                        & \multicolumn{2}{c}{\(-dim(\mathcal{A})=-5\)}                \\ \hline
+        Number of Atoms             & ---                        & ---            & \(25\)                                     \\
+        Number of Truncated Atoms   & ---                        & ---            & \(3\)                                      \\
+    \end{tabular}
+\end{table}
+\capstarttrue%
