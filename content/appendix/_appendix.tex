@@ -4,9 +4,14 @@
 \setcounter{section}{0}
 \renewcommand{\thesection}{\Alph{section}}
 
+% Fix numbering for figures in the appendix
+% Note: requires `\setcounter{figure}{0}` at every section
+\renewcommand\thefigure{\thesection.\arabic{figure}}
+
 \input{content/appendix/joint_trajectory_controller}
-\input{content/appendix/scripted_policy.tex}
 \input{content/appendix/hyperparameters}
 \input{content/appendix/calibration}
+\newpage
 \input{content/appendix/camera_configuration_and_postprocessing}
+\newpage
 \input{content/appendix/feature_extraction_from_rgb_and_rgbd_observations}
