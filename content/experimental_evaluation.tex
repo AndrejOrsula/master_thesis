@@ -10,12 +10,12 @@ All experiments utilise the simulation environment for the training of all RL ag
 
 \subsection{Simulation}
 
-Unless otherwise stated, the training in simulation is identical to the setup described in \autoref{sec:impl_simulation_environment} with full-scale domain randomisation. UR5 robot with RG2 gripper is utilised as the primary robot for all experiments because it is the robot that is also tested in real-world domain. However, one of the agents is trained using the Panda robot. Panda is also used to evaluate possible generalisation to new robots with an agent trained on UR5, and vice versa. The same random seed is used to train all agents.
+Unless otherwise stated, the training in simulation is identical to the setup described in \autoref{sec:impl_simulation_environment} with full-scale domain randomisation. UR5 robot with RG2 gripper is utilised as the primary robot for all experiments because it is the robot that is also tested in real-world domain. However, one of the agents is trained using the Panda robot. Panda is also used to evaluate possible generalisation to new robots with a transfer of an agent trained on UR5, and vice versa. The same random seed is used to train all agents.
 
 When evaluating the trained agents, testing datasets for both object models and PBR textures are used. The environment is configured to present the agent with the full task, i.e.~largest possible workspace and maximum number of objects. Each episode can last at most~100 time steps and agent succeeds only if an object is lifted~12.5~cm above the ground. The random seed is changed for all evaluated agents to a new common value that is different from a seed used during training. In order to encourage reproducibility, this simulation setup is available as a pre-built Docker image\footnote{\href{https://hub.docker.com/r/andrejorsula/drl_grasping}{https://hub.docker.com/r/andrejorsula/drl\_grasping}}.
 
 
-\subsection{Real}
+\subsection{Real}\label{subsec:real_setup}
 
 Real world setup shown in \autoref{fig:real_setup} is used to evaluate sim-to-real transfer. This setup consists of a UR5 robot with RG2 gripper and Intel RealSense D435 RGB-D camera\footnote{\href{https://intelrealsense.com/depth-camera-d435}{https://intelrealsense.com/depth-camera-d435}} that is mounted on a tripod in front of the robot. Pose of the camera with respect to the robot is calibrated with a procedure described in \hyperref[app:calibration]{appendix~\ref*{app:calibration}}. Similarly, \hyperref[app:camera_configuration_and_postprocessing]{appendix~\ref*{app:camera_configuration_and_postprocessing}} presents the configuration and post-processing of the camera output.
 
@@ -31,44 +31,153 @@ Real world setup shown in \autoref{fig:real_setup} is used to evaluate sim-to-re
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.75\textwidth]{experimental_evaluation/real_objects.png}
-    \caption{A set of 18 objects used during the sim-to-real evaluation.}
+    \caption{A set of 18 objects that were used during the evaluation of sim-to-real transfer.}
     \label{fig:real_objects}
 \end{figure}
 
 
 \section{Results}
 
+Results of the following experiments are presented in this section. First, actor-critic algorithms are compared on the created simulation environment in order to select the best performing one for the task of robotic grasping. Hereafter, octree-based 3D observations are compared to traditional 2D and 2.5D image observations, and studied with respect to camera pose invariance. Similarly, invariance to the utilised robot is evaluated for both training process and transfer of already learned policy. Lastly, results of sim-to-real transfer are presented.
+
+All agents were trained over the duration of~500,000 time steps, which is assumed to provide a comparative analysis among the different experiments from this work. It is however expected, that the final performance for many of these agents can be improved with a longer training duration. During evaluation of agents on novel scenes inside simulation,~200 episodes are used for each agent.
+
+
 \subsection{Comparison of Actor-Critic Algorithms}
 
-\subsection{Comparison of 2D/2.5D/3D Feature Extraction}
+TD3, SAC and TQC were trained using the same grasping environment with a network architecture presented in \autoref{subsec:actor_critic_network_architecture} and hyperparameters from \hyperref[app:hyperparameters]{appendix~\ref*{app:hyperparameters}}. The success rate during training and the final success rate on novel objects and textures is presented in \autoref{fig:training_curve_comparison_actor_critic_algorithms} for all three algorithms.
 
-params:
-    octree - 226384
-    rgb -
-    rgbd - 227822 (or 229766)
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.75\textwidth]{experimental_evaluation/.pdf}
+    \caption{Success rate of TD3, SAC and TQC algorithms on the created grasping environment.}
+    \label{fig:training_curve_comparison_actor_critic_algorithms}
+\end{figure}
+
+Based on these results, TQC is utilised for all subsequent experiments.
+
+
+\subsection{Comparison of 2D/2.5D/3D Observations}\label{subsec:comparison_of_2d_2_5d_3d_observations}
+
+3D octree observations are now compared to more traditional 2D RGB and 2.5D RGB-D observations. Besides the success rate, this comparison also includes computational complexity in terms of memory usage and processing time. For octrees, feature extractor from \autoref{subsec:feature_extraction} is used. For RGB and RGB-D images, an analogous CNN feature extractor described in \hyperref[app:feature_extraction_from_rgb_and_rgbd_observations]{appendix~\ref*{app:feature_extraction_from_rgb_and_rgbd_observations}} is employed instead.  In order to make the comparison fair, the exact same architecture is used with approximately the same number of learnable parameters as listed in \autoref{tab:feature_extractor_number_of_learnable_parameters_comparison}. TQC hyperparameters from \hyperref[app:hyperparameters]{appendix~\ref*{app:hyperparameters}} are used for all agents. In order to utilise the same replay buffer size for all three agents, the resolution of RGB images and depth maps had to be reduced to~128\({\times}\)128~px for all observation types, including octrees. Note that the change of image resolution does not impact the number of learnable parameters for octrees.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l|ccc}
+                                               &
+        \textbf{\begin{tabular}[c]{@{}c@{}}2D\\ RGB Image\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}2.5D\\ RGB-D Image\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}3D\\ Octree\end{tabular}}           \\ \hline
+        Learnable Parameters                   & 229,248                                & 229,680                                & 226,494
+    \end{tabular}
+    \caption{Number of learnable parameters per each observation stack for the utilised RGB, RGB-D and octree-based feature extractors.}
+    \label{tab:feature_extractor_number_of_learnable_parameters_comparison}
+\end{table}
+
+The three different feature extractors are first trained in the fully randomised environment. However, as results in \autoref{fig:training_curve_comparison_2d_2_5d_3d_random_camera_pose} indicate, 2D and 2.5D observations are unable to provide invariance to camera pose.
+
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.75\textwidth]{experimental_evaluation/.pdf}
+    \caption{Success rate of RGB, RGB-D and octree-based feature extractors on environment with randomised camera pose.}
+    \label{fig:training_curve_comparison_2d_2_5d_3d_random_camera_pose}
+\end{figure}
+
+Therefore, this experiment is repeated for an environment where the camera pose is static and remains unchanged throughout the entire training and subsequent evaluation on novel scenes. \autoref{fig:training_curve_comparison_2d_2_5d_3d_random_camera_pose} provides results for such environment with reduced domain randomisation.
+
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.75\textwidth]{experimental_evaluation/.pdf}
+    \caption{Success rate of RGB, RGB-D and octree-based feature extractors on environment with a fixed camera pose.}
+    \label{fig:training_curve_comparison_2d_2_5d_3d_fixed_camera_pose}
+\end{figure}
+
+Lastly, comparison of memory usage and computational time is presented in \autoref{tab:feature_extractor_memory_and_computational_time}.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{r|ccc}
+                                                      &
+        \textbf{\begin{tabular}[c]{@{}c@{}}2D\\ RGB Image\end{tabular}}        & \textbf{\begin{tabular}[c]{@{}c@{}}2.5D\\ RGB-D Image\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}3D\\ Octree\end{tabular}}                 \\ \hline
+        \multirow{2}{*}{Size \textit{(per sample)}}   & \multirow{2}{*}{X}                      & \multirow{2}{*}{XX}                     & XXX (average) \\
+                                                      &                                         &                                         & XXX (maximum) \\ \hline
+        Pre-processing \textit{(average, per sample)} & ---                                     & ---                                     & X             \\
+        Forward \textit{(average, per sample)}        & X                                       & X                                       & X             \\
+        Forward \textit{(average, batch of 32)}       & X                                       & X                                       & X             \\
+        Update \textit{(average, batch of 32)}        & X                                       & X                                       & X
+    \end{tabular}
+    \caption{Comparison of computational complexity for RGB, RGB-D and octree-based observations with their corresponding feature extractors. Pre-processing is performed during data collection and consists of point cloud processing, estimation of normals and creation of octree.}
+    \label{tab:feature_extractor_memory_and_computational_time}
+\end{table}
+
+
+\subsection{Invariance to Camera Pose}
+
+Based on the results of the previous experiment, agent with octree observations and fully randomised camera pose is evaluated with respect to its learned generalisation to different camera poses on novel scenes. A total of X various poses with different azimuth and height are evaluated, with corresponding results shown in \autoref{fig:invariance_to_camera_pose}.
+
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.75\textwidth]{experimental_evaluation/.pdf}
+    \caption{Success rate to novel scenes for different camera poses.}
+    \label{fig:invariance_to_camera_pose}
+\end{figure}
 
 
 \subsection{Invariance to Robot}
 
-\subsection{Invariance to Camera Pose}
+In addition to training agents with octree observations on UR5 robot with RG2 gripper, an agent is also trained on Panda robot in order to study the robustness of state-of-the-art actor-critic algorithm with octree observations to different kinematic chains and gripper designs. Comparison between of success rate between UR5 and Panda can be seen in \autoref{fig:invariance_to_robot}.
+
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.75\textwidth]{experimental_evaluation/.pdf}
+    \caption{Success rate of UR5 and Panda robots using the same environment, algorithm and hyperparameters.}
+    \label{fig:invariance_to_robot}
+\end{figure}
+
+Furthermore, feasibility of transferring a policy trained on one robot to another is investigated. Such transfer is evaluated on novel scenes with a policy trained on both UR5 and Panda. Results for this experiment can be found in \autoref{tab:results_robot_transfer}.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{cr|cc}
+                                                        &                & \multicolumn{2}{c}{During Evaluation}                  \\
+                                                        &                & \textbf{UR5}                          & \textbf{Panda} \\ \hline
+        \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}During\\ Training\end{tabular}} & \textbf{UR5}   & UR5/UR5                               & UR5/Panda      \\
+                                                        & \textbf{Panda} & Panda/UR5                             & Panda/Panda
+    \end{tabular}
+    \caption{Comparison of success rate on novel scenes for policies trained one robot and evaluated on another. UR5 robot with RG2 gripper and Panda robot with its default gripper were evaluated.}
+    \label{tab:results_robot_transfer}
+\end{table}
+
 
 \subsection{Sim-to-Real Transfer}
 
-41/60 success
-- 68\%
+Finally, an agent trained inside simulation is evaluated in real-world domain to study the feasibility of sim-to-real transfer for environment with extensive domain randomisation and octree-based observations. Setup described in \autoref{subsec:real_setup} is used, where objects are randomly replaced after each success or~100 time steps. With this setup,~41 out of~60 episodes were successful, which results in a success rate of~68.3\%. \autoref{fig:sim_to_real_success_examples} shows few examples of successful grasps and a recording is available on YouTube\footnote{\href{https://youtube.com/watch?v=btxqzFOgCyQ&list=PLzcIGFRbGF3Qr4XSzAjNwOMPaeDn5J6i1}{https://youtube.com/watch?v=btxqzFOgCyQ}}.
+
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.75\textwidth]{experimental_evaluation/.pdf}
+    \caption{Examples of successful grasps accomplished by a policy that was transferred from simulation to real-world domain.}
+    \label{fig:sim_to_real_success_examples}
+\end{figure}
 
 
 \section{Ablation Studies}
 
-\subsection{Curriculum}
+Besides results presented in the previous section, various ablations of the full approach are studied in order to determine contributions of its components. It is believed that these results are applicable also for other robotics tasks that utilise visual observations. \autoref{fig:ablation_studies} presents these ablations with respect to their learning curve and attainable success rate.
 
-\subsection{Demonstrations}
+\begin{figure}[ht]
+    \centering
+    % \includegraphics[width=0.75\textwidth]{experimental_evaluation/.pdf}
+    \caption{Success rate of various ablations of the full method with octree observations.}
+    \label{fig:ablation_studies}
+\end{figure}
 
-\subsection{Colour Features}
+\paragraph{Demonstrations} Preloading experience replay buffer with demonstrations ...
 
-\subsection{Proprioceptive Observations}
+\paragraph{Curriculum} Similar to demonstrations, curriculum is meant to ...
 
-\subsection{Sharing of Feature Extractor between Actor and Critics}
+\paragraph{Colour Features} By removing colour features from the octree ...
 
-\subsection{Separate Feature Extractors for Stacked Observations}
+\paragraph{Proprioceptive Observations} Addition of proprioceptive observations has ...
 
+\paragraph{Sharing of Feature Extractor between Actor and Critics} Using a shared feature extractor for actor and critic ...
+
+\paragraph{Separate Feature Extractors for Stacked Observations} If a shared feature extractor is used for all stacked observations, ...
