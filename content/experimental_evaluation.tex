@@ -1,23 +1,23 @@
 \chapter{Experimental Evaluation}\label{ch:experimental_evaluation}
 
-This chapter presents results of experiments that were conducted in order to evaluate the use of DRL for robotic grasping with octree-based observations. The created simulation environment is analysed with respect to the feasibility of sim-to-real transfer in order to validate the applicability of all results for use in real-world domain. Furthermore, various configurations and ablations are studied to provide comparative investigation of different approaches and their advantages for learning robotic manipulation with DRL.
+This chapter presents results of experiments that were conducted in order to evaluate the use of DRL for robotic grasping with 3D octree-based observations. The created simulation environment is analysed with respect to the feasibility of sim-to-real transfer in order to validate the applicability of all results for use in real-world domain. Furthermore, various configurations and ablations are studied to provide comparative investigation of different approaches and their advantages for learning robotic manipulation with DRL.
 
 
 \section{Experimental Setup}
 
-All experiments utilise the simulation environment for the training of all RL agents. Generalisation to novel objects is evaluated for all agents in the same simulation but on a testing dataset, where one of the trained agents is in addition evaluated also on a real robot.
+All experiments utilise simulation environment for the training of all RL agents. Generalisation to novel objects is evaluated for all agents in the same simulation but on a testing dataset, where one of the trained agents is in addition evaluated also on a real robot to investigate sim-to-real capabilities.
 
 
 \subsection{Simulation}
 
-Unless otherwise stated, the training in simulation is identical to the setup described in \autoref{sec:impl_simulation_environment} with full-scale domain randomisation. UR5 robot with RG2 gripper is utilised as the primary robot for all experiments because it is the robot that is also tested in real-world domain. However, one of the agents is trained using the Panda robot. Panda is also used to evaluate possible generalisation to new robots with a transfer of an agent trained on UR5, and vice versa. The same random seed is used to train all agents.
+Unless otherwise stated, the training in simulation is identical to the setup described in \autoref{sec:impl_simulation_environment} with full-scale domain randomisation. UR5 robot with RG2 gripper is utilised as the primary robot for all experiments because it is the robot that is also tested in real-world domain. However,  Panda robot is also used to train one of the agents. Panda is in addition used to evaluate possible generalisation to new robots with a transfer of an agent trained on UR5, and vice versa. The same random seed is used to train all agents.
 
-When evaluating the trained agents, testing datasets for both object models and PBR textures are used. The environment is configured to present the agent with the full task, i.e.~largest possible workspace and maximum number of objects. Each episode can last at most~100 time steps and agent succeeds only if an object is lifted~12.5~cm above the ground. The random seed is changed for all evaluated agents to a new common value that is different from a seed used during training. In order to encourage reproducibility, this simulation setup is available as a pre-built Docker image\footnote{\href{https://hub.docker.com/r/andrejorsula/drl_grasping}{https://hub.docker.com/r/andrejorsula/drl\_grasping}}.
+When evaluating the trained agents, testing datasets for both object models and PBR textures are used. The environment is configured to present the agent with the full task, i.e.~the largest possible workspace and maximum number of objects. Each episode can last at most~100 time steps and agent succeeds only if an object is lifted~12.5~cm above the ground. The random seed is changed for all evaluated agents to a new common value that is different from a seed used during training. In order to encourage reproducibility, this simulation setup is available as a pre-built Docker image\footnote{\href{https://hub.docker.com/r/andrejorsula/drl_grasping}{https://hub.docker.com/r/andrejorsula/drl\_grasping}}.
 
 
 \subsection{Real}\label{subsec:real_setup}
 
-Real world setup shown in \autoref{fig:real_setup} is used to evaluate sim-to-real transfer. This setup consists of a UR5 robot with RG2 gripper and Intel RealSense D435 RGB-D camera\footnote{\href{https://intelrealsense.com/depth-camera-d435}{https://intelrealsense.com/depth-camera-d435}} that is mounted on a tripod in front of the robot. Pose of the camera with respect to the robot is calibrated with a procedure described in \hyperref[app:calibration]{appendix~\ref*{app:calibration}}. Similarly, \hyperref[app:camera_configuration_and_postprocessing]{appendix~\ref*{app:camera_configuration_and_postprocessing}} presents the configuration and post-processing of the camera output.
+Real world setup shown in \autoref{fig:real_setup} is used to evaluate sim-to-real transfer. This setup consists of a UR5 robot with RG2 gripper and Intel RealSense D435\footnote{\href{https://intelrealsense.com/depth-camera-d435}{https://intelrealsense.com/depth-camera-d435}} RGB-D camera that is mounted on a tripod in front of the robot. Pose of the camera with respect to the robot is calibrated with a procedure described in \hyperref[app:camera_pose_calibration]{appendix~\ref*{app:camera_pose_calibration}}. Similarly, \hyperref[app:camera_configuration_and_postprocessing]{appendix~\ref*{app:camera_configuration_and_postprocessing}} presents configuration of the camera and post-processing of its output.
 
 \begin{figure}[ht]
     \centering
@@ -59,7 +59,7 @@ Based on these results, TQC is utilised for all subsequent experiments.
 
 \subsection{Comparison of 2D/2.5D/3D Observations}\label{subsec:comparison_of_2d_2_5d_3d_observations}
 
-3D octree observations are now compared to more traditional 2D RGB and 2.5D RGB-D observations. Besides the success rate, this comparison also includes computational complexity in terms of memory usage and processing time. For octrees, feature extractor from \autoref{subsec:feature_extraction} is used. For RGB and RGB-D images, an analogous CNN feature extractor described in \hyperref[app:feature_extraction_from_rgb_and_rgbd_observations]{appendix~\ref*{app:feature_extraction_from_rgb_and_rgbd_observations}} is employed instead.  In order to make the comparison fair, the exact same architecture is used with approximately the same number of learnable parameters as listed in \autoref{tab:feature_extractor_number_of_learnable_parameters_comparison}. TQC hyperparameters from \hyperref[app:hyperparameters]{appendix~\ref*{app:hyperparameters}} are used for all agents. In order to utilise the same replay buffer size for all three agents, the resolution of RGB images and depth maps had to be reduced to~128\({\times}\)128~px for all observation types, including octrees. Note that the change of image resolution does not impact the number of learnable parameters for octrees.
+3D octree observations are now compared to more traditional 2D RGB and 2.5D RGB-D observations. Besides the success rate, this comparison also includes computational complexity in terms of memory usage and processing time. For octrees, feature extractor from \autoref{subsec:feature_extraction} is used. For RGB and RGB-D images, an analogous CNN feature extractor described in \hyperref[app:feature_extraction_from_rgb_and_rgbd_observations]{appendix~\ref*{app:feature_extraction_from_rgb_and_rgbd_observations}} is employed instead.  In order to make the comparison fair, the same architecture design is used with approximately the same number of learnable parameters as listed in \autoref{tab:feature_extractor_number_of_learnable_parameters_comparison}. TQC hyperparameters from \hyperref[app:hyperparameters]{appendix~\ref*{app:hyperparameters}} are used for all agents. In order to utilise the same replay buffer size for all three agents, the resolution of RGB images and depth maps had to be reduced to~128\({\times}\)128~px for all observation types, including octrees. Note that the change of image resolution does not impact the number of learnable parameters for octrees.
 
 \begin{table}[ht]
     \centering
@@ -81,7 +81,7 @@ The three different feature extractors are first trained in the fully randomised
     \label{fig:training_curve_comparison_2d_2_5d_3d_random_camera_pose}
 \end{figure}
 
-Therefore, this experiment is repeated for an environment where the camera pose is static and remains unchanged throughout the entire training and subsequent evaluation on novel scenes. \autoref{fig:training_curve_comparison_2d_2_5d_3d_random_camera_pose} provides results for such environment with reduced domain randomisation.
+Therefore, this experiment is repeated for an environment where the camera pose is static and remains unchanged throughout the entire training and subsequent evaluation on novel scenes. \autoref{fig:training_curve_comparison_2d_2_5d_3d_fixed_camera_pose} provides results for such environment with reduced domain randomisation.
 
 \begin{figure}[ht]
     \centering
@@ -123,8 +123,9 @@ Based on the results of the previous experiment, agent with octree observations 
 
 \subsection{Invariance to Robot}
 
-In addition to training agents with octree observations on UR5 robot with RG2 gripper, an agent is also trained on Panda robot in order to study the robustness of state-of-the-art actor-critic algorithm with octree observations to different kinematic chains and gripper designs. Comparison between of success rate between UR5 and Panda can be seen in \autoref{fig:invariance_to_robot}.
+In addition to training agents with octree observations on UR5 robot with RG2 gripper, an agent is also trained on Panda robot in order to study the robustness of state-of-the-art actor-critic algorithm with octree observations to different kinematic chains and gripper designs. Comparison of success rate between UR5 and Panda can be seen in \autoref{fig:invariance_to_robot}.
 
+% Consider skipping this figure if section gets too crowded
 \begin{figure}[ht]
     \centering
     % \includegraphics[width=0.75\textwidth]{experimental_evaluation/.pdf}
@@ -149,7 +150,7 @@ Furthermore, feasibility of transferring a policy trained on one robot to anothe
 
 \subsection{Sim-to-Real Transfer}
 
-Finally, an agent trained inside simulation is evaluated in real-world domain to study the feasibility of sim-to-real transfer for environment with extensive domain randomisation and octree-based observations. Setup described in \autoref{subsec:real_setup} is used, where objects are randomly replaced after each success or~100 time steps. With this setup,~41 out of~60 episodes were successful, which results in a success rate of~68.3\%. \autoref{fig:sim_to_real_success_examples} shows few examples of successful grasps and a recording is available on YouTube\footnote{\href{https://youtube.com/watch?v=btxqzFOgCyQ&list=PLzcIGFRbGF3Qr4XSzAjNwOMPaeDn5J6i1}{https://youtube.com/watch?v=btxqzFOgCyQ}}.
+Finally, an agent trained inside simulation is evaluated in real-world domain to study the feasibility of sim-to-real transfer for environment with extensive domain randomisation and octree-based observations. Setup described in \autoref{subsec:real_setup} is used, where objects are randomly replaced after each success or~100 time steps. With this setup,~41 out of~60 episodes were successful, which results in a success rate of~68\%. \autoref{fig:sim_to_real_success_examples} shows few examples of successful grasps and a recording is available on YouTube\footnote{\href{https://youtube.com/watch?v=btxqzFOgCyQ&list=PLzcIGFRbGF3Qr4XSzAjNwOMPaeDn5J6i1}{https://youtube.com/watch?v=btxqzFOgCyQ}}.
 
 \begin{figure}[ht]
     \centering
