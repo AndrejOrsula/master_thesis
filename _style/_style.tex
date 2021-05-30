@@ -26,6 +26,9 @@
 \usepackage{svg-extract}
 \usepackage{subcaption}
 \usepackage{textcomp}
+\DisemulatePackage{setspace}
+\usepackage{setspace}
+
 
 %%% Define custom colours
 \definecolor{aaudarkblue}{RGB}{33,26,82}
@@ -93,5 +96,10 @@
 % Better looking URLs (line breaks)
 \Urlmuskip=0mu plus 1mu
 
+
 %%% Remove footnote separator
 \renewcommand*\footnoterule{}
+
+
+%%% Define line spacing for better readability of blocks
+\def\blocklinespacing{1.2}

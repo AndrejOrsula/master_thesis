@@ -23,7 +23,7 @@
     {\centering\textbf{\thesistype} \\\bigskip\par}
     \textbf{Title:}                 \\\thesistitlemultiline\bigskip\par
     \textbf{Programme:}             \\\programme\bigskip\par
-    \textbf{Author:}                \\\thesisauthor\footnotemark{}\bigskip\par
+    \textbf{Author:}                \\\thesisauthor\bigskip\par
     \textbf{Supervisor:}            \\\supervisor\bigskip\par
     \textbf{Number of Pages:}       \\\pageref{LastPage}\bigskip\par
     \textbf{Submission Date:}       \\\today
@@ -37,5 +37,8 @@
 \end{tabular}
 \capstarttrue%
 \vfill
-\footnotetext{\href{mailto:\thesisauthormail}{\thesisauthormail}}
+\makeatletter
+\def\blfootnote{\gdef\@thefnmark{}\@footnotetext}
+\makeatother
+\blfootnote{\href{mailto:\thesisauthormail}{{\includegraphics[height=6pt]{_misc/email_logo.pdf}}~\thesisauthormail}}
 \cleardoublepage

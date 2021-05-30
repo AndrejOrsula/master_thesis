@@ -21,6 +21,9 @@
 \pdfbookmark[0]{Table of Contents}{label:toc}%
 \tableofcontents*
 
+%%% Line spacing for better readability of blocks
+\setstretch{\blocklinespacing}
+
 %%% Include preamble
 \include{content/preamble/_preamble}
 
@@ -31,8 +34,10 @@
 %%% Include the main content
 \include{content/_content}
 
-%%% Include bibliography
+%%% Include bibliography, use single line spacing for compactness
+\singlespacing
 \bibliography{bibliography/bibliography, bibliography/bibliography_manual}
+\setstretch{\blocklinespacing}
 
 %%% Include appendices
 \include{content/appendix/_appendix}

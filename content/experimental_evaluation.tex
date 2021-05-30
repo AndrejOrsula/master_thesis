@@ -40,7 +40,7 @@ Real world setup shown in \autoref{fig:real_setup} is used to evaluate sim-to-re
 
 Results of the following experiments are presented in this section. First, actor-critic algorithms are compared on the created simulation environment in order to select the best performing one for the task of robotic grasping. Hereafter, octree-based 3D observations are compared to traditional 2D and 2.5D image observations, and studied with respect to camera pose invariance. Similarly, invariance to the utilised robot is evaluated for both training process and transfer of already learned policy. Lastly, results of sim-to-real transfer are presented.
 
-All agents were trained over the duration of~500,000 time steps, which is assumed to provide a comparative analysis among the different experiments from this work. It is however expected, that the final performance for many of these agents can be improved with a longer training duration. During evaluation of agents on novel scenes inside simulation,~200 episodes are used for each agent.
+All agents were trained over the duration of~500,000 time steps, which is assumed to provide a comparative analysis among the different experiments from this work. It is however expected, that the final performance for many of these agents can be improved with a longer training duration. On average, each agent takes three days to train from the beginning until the set duration is reached. Therefore, only a single random seed is employed for all agents due to the time-consuming training procedure and time constraints, however, use of several different seeds is encouraged as it would provide more definitive results. During evaluation of agents on novel scenes inside simulation,~200 episodes are used for each agent.
 
 
 \subsection{Comparison of Actor-Critic Algorithms}
@@ -176,6 +176,8 @@ Besides results presented in the previous section, various ablations of the full
 \paragraph{Curriculum} Similar to demonstrations, curriculum is meant to ...
 
 \paragraph{Colour Features} By removing colour features from the octree ...
+"When comparing agents with and without colour features, an agent with colour features is more successful at grasping small objects."
+
 
 \paragraph{Proprioceptive Observations} Addition of proprioceptive observations has ...
 
