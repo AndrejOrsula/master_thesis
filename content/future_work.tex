@@ -1,29 +1,19 @@
 \chapter{Future Work}\label{ch:future_work}
 
-% Environment:
-% Add various robot models to the domain randomization to make the policy fully robot agnostic.
-% Add parallel workers
-% Random illumination
-% Add domain adaptation and data augmentation
-% camera on robot
-% ...
+This chapter contains a list of improvements and possible future directions of this work.
 
-% full 3d rotation
+\paragraph{Octree for the Entire Reachable Workspace} The observable workspace was restricted to a subset of robot's reachable workspace in order to reduce computational complexity of the problem. Due to efficient structure of octrees, it is believed that a single octree with deeper structure could be extended to cover the entire reachable workspace of a robot. It would provide agent with much better understanding of the scene, where multiple depth sensing cameras could be combined together in order to reduce occlusions. With larger workspace, a single policy could be applied as a component in many different high-level tasks that need to be performed all around the robot. Furthermore, it would simplify its use in mobile manipulation, where large and detailed observations are required. However, the increase in memory usage and computational cost would need to evaluated to assess benefits and drawbacks.
 
+\paragraph{Parallel Environments} The implemented simulation environment for robotic grasping is currently limited to a single worker, which unfortunately hinders its scalability. However, data collection could be accelerated by utilising several workers in parallel, which would also increase the variety in data. Each worker could contribute with transitions into a common experience replay buffer. A separate thread could then sample transitions from such buffer in order to perform asynchronous updates of the policy.
 
-% Prioritized Experience Replay
-% Hindsight Experience Replay
+\paragraph{Random Robot} It is believed that an end-to-end policy could be trained to be fully robot agnostic if an agent experiences many different robots and gripper configurations throughout its training. Randomisation of robot model could be part of the already existing domain randomisation, where different combinations of kinematic chains and gripper designs could be randomly selected. Furthermore, randomisation of mechanical, inertial and visual properties for robots and grippers would be beneficial.
 
+\paragraph{Random Ground Plane Geometry} In addition to randomising visual properties of the ground plane, its geometry could also be randomised in order to generalise to different types of supporting surfaces. This could be accomplished by employing a procedurally generated heightmap with random geometry and texture.
 
-% Adaptive octree
-% \cite{wang_adaptive_2018}
-% Might cause problems
+\paragraph{Data Augmentation} Use of data augmentation in addition to domain randomisation and sensor noise would greatly increase the variety in data. However, it needs to be investigated at which phase such augmentation should be introduced in order to maximise its effectiveness. It could be applied on the original RGB image and depth map, point cloud and even the octree. Each of these augmentations could accomplish a different variation in the data and provide policy with even more robustness and improve the likelihood of sim-to-real transfer.
 
-% Process octree from various orientations???
+\paragraph{Control of Full 3D Rotation} Action space of end-to-end grasping is currently restricted to the yaw rotation. However, many objects cannot be grasped directly from top and having control over the full 3D orientation could improve performance of the learned policy. Will full control of gripper pose, the state space would be significantly enlarged, which will eventually lead to many challenges with respect to exploration and safety.
 
-% HER - hindsight experience replay - Mention here?
+\paragraph{Semantic Grasping} In addition to traditional grasping of any object from the scene, RL could be applied for semantic grasping in which a specific object or a class of objects need to be grasped. Some of the existing research in this area trained an entire policy for a specific object. However, a goal-oriented definition of the task could be applied, where an agent would be provided with target goal in addition to observations. With this approach, a single policy could be applied for a variety of objects and scenarios, which would further improve its applicability for real problems.
 
-% support for more robots
-
-
-multiple cameras
+\paragraph{Directional Grasping} It is often useful for real-world applications to specify direction from which an object needs to be grasped. Directional grasping could therefore be an extension of the previous two points, where a policy with specified grasp direction could be trained.
