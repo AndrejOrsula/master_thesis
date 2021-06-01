@@ -4,14 +4,14 @@ This chapter systematically formulates the targetted task of robotic grasping as
 
 \section{Task Definition}\label{sec:problem_formulation_task_definition}
 
-In this work, agent is assumed to be a high-level controller that provides sequential decision making in form of gripper poses and actions. Therefore, the environment is considered to include all objects and physical interactions between in addition to the robot with its actuators and low-level controllers. Episodic formulation of the grasping task is studied, where a new set of objects is introduced into the scene at the beginning of each episode. During each episode, the aim of agent is to grasp and lift an object to a certain height above the ground plane that the objects rest on, which also terminates the current episode. Furthermore, an episode is also terminated after~100 time steps and whenever the agent pushes all objects outside the union of the perceived and reachable workspace. Placing of objects after their picking is not investigated in this work.
+In this work, agent is assumed to be a high-level controller that provides sequential decision making in form of gripper poses and actions. Therefore, the environment is considered to include all objects and physical interactions in addition to the robot with its actuators and low-level controllers. Episodic formulation of the grasping task is studied, where a new set of objects is introduced into the scene at the beginning of each episode. During each episode, the aim of agent is to grasp and lift an object to a certain height above the ground plane, which also terminates the current episode. Furthermore, an episode is also terminated after~100 time steps and whenever the agent pushes all objects outside the union of the perceived and reachable workspace. Placing of objects after their picking is not investigated in this work.
 
 Due to the benefits of employing robotics simulators to train RL agents, e.g.~safe and inexpensive data collection, robotics simulator will be used in this work. Once an agent is trained in a virtual environment, the learned policy will subsequently be evaluated in a real-world setup via sim-to-real transfer. The conceptual setup of this work that should be similar in both domains is illustrated in \autoref{fig:problem_formulation_setup_sketch}.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.65\textwidth]{problem_formulation/setup_sketch.pdf}
-    \caption{Conceptual setup for the task of robotic grasping that needs to be constructed both inside a robotics simulator for training and in real-world domain for subsequent evaluation.}
+    \includegraphics[width=0.49\textwidth]{problem_formulation/setup_sketch.pdf}
+    \caption{Conceptual setup for the task of robotic grasping that needs to be constructed inside a robotics simulator for training and in real-world domain for subsequent evaluation.}
     \label{fig:problem_formulation_setup_sketch}
 \end{figure}
 
