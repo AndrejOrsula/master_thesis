@@ -9,7 +9,7 @@ Robotic manipulation and grasping is a field that has been extensively studied f
 Analytical approaches determine grasps that satisfy target requirements through kinematic and dynamic formulations \cite{sahbani_overview_2012}. These methods typically analyze the geometry of target object and utilised gripper in order to generate a suitable grasp pose, which can then be reached by using a separate motion planner. The approach was introduced by \citet{nguyen_constructing_1987} through formulation of objectives for constructing stable force-closure grasps on polyhedral objects. By modelling objects as triangular mesh or 3D point cloud, force-closure grasps were later extended to remove model restrictions \cite{yun-hui_liu_complete_2004}. Several analytical metrics for estimating the quality of grasps were also introduced over the years to quantify good grasps \cite{roa_grasp_2015}, many of which have found their applicability beyond analytical approaches.
 
 % Difficulties
-Expert human knowledge of robot in a specific task is required to develop these algorithm, which allows them to achieve very efficient operation on a number of selected objects due to direct transfer of this knowledge. However, this also introduces a limitation because performance is restricted only to the predicted situations and scalable generalisation to novel objects is often unfeasible due to computation complexity that arises from the number of considered conditions \cite{sahbani_overview_2012}. Moreover, geometric models of objects might not be available before interaction is required, and partial occlusion of objects in setups with passive perception similarly limits the use of geometrical analysis.
+Expert human knowledge of robot in a specific task is required to develop these algorithm, which allows them to achieve very efficient operation on a number of selected objects due to direct transfer of this knowledge. However, this also introduces a limitation because performance is restricted only to the predicted situations and scalable generalisation to novel objects is often unfeasible due to computational complexity that arises from the number of considered conditions \cite{sahbani_overview_2012}. Moreover, geometric models of objects might not be available before interaction is required, and partial occlusion of objects in setups with passive perception similarly limits the use of geometrical analysis.
 
 
 \section{Supervised Learning}
@@ -31,7 +31,7 @@ Besides 2D images, supervised DL methods have also been applied to 3D data repre
 \end{figure}
 
 % Difficulties
-Although supervised learning approaches can achieve high success rate, their main disadvantage is the large volume of labelled data required to effectively learn grasp generation. The process of labelling a dataset is generally automated because it is non-trivial to perform it manually due to the multitude of ways in which an object can be grasped, furthermore, human labelling introduces bias \cite{pinto_supersizing_2015}. However, the data collection itself is still very costly if performed on a physical setup. \citet{levine_learning_2016} used a setup shown in \autoref{fig:rw_multiple_robots} with up to fourteen robots to collect 800,000 grasp attempts over the course of two months. To avoid this time-consuming process, majority of recent work relies on synthetically generated datasets. As an example, \citet{mahler_dex-net_2017} achieved~\(99\)\% precision by training on a dataset with 6.7 million point clouds of more than 10,000 unique 3D models, each containing grasps and corresponding analytical grasp metrics. Generalization to other gripper types is also limited and the entire dataset needs to be updated in order to support new types, which is why they created a new dataset of 2.8 million point clouds in \citeyear{mahler_dex-net_2018} for vacuum-based grippers. This issue was later addressed by creating a common dataset for both parallel-jaw and vacuum-based grippers by using a more complex and general analytical metric based on object's expected resistance to forces and torques \cite{mahler_learning_2019}.
+Although supervised learning approaches can achieve high success rate, their main disadvantage is the large volume of labelled data required to effectively learn grasp generation. The process of labelling a dataset is generally automated because it is non-trivial to perform it manually due to the multitude of ways in which an object can be grasped, furthermore, human labelling introduces bias \cite{pinto_supersizing_2015}. However, the data collection itself is still very costly if performed on a physical setup. \citet{levine_learning_2016} used a setup shown in \autoref{fig:rw_multiple_robots} with up to fourteen robots to collect 800,000 grasp attempts over the course of two months. To avoid this time-consuming process, majority of recent work relies on synthetically generated datasets. As an example, \citet{mahler_dex-net_2017} achieved~\(99\)\% precision by training on a dataset with 6.7 million point clouds of more than 10,000 unique 3D models, each containing grasps and corresponding analytical grasp metrics. Generalisation to other gripper types is also limited and the entire dataset needs to be updated in order to support new types, which is why they created a new dataset of 2.8 million point clouds in \citeyear{mahler_dex-net_2018} for vacuum-based grippers. This issue was later addressed by creating a common dataset for both parallel-jaw and vacuum-based grippers by using a more complex and general analytical metric based on object's expected resistance to forces and torques \cite{mahler_learning_2019}.
 
 
 \section{Imitation Learning}
@@ -163,23 +163,23 @@ Due to the popularity of training DRL agents inside simulations, there are sever
 
 \newpage
 
-\paragraph{Domain Randomization} Another way to easily expand the variety in data is by randomly changing the simulated environment. \citet{tobin_domain_2017} applied this method in order to randomise visual attributes shown in \autoref{fig:sim2real_domain_randomization}, such as object colours, table texture, camera pose and characteristics of the illumination. Furthermore, domain randomization can be extended also to other non-visual simulation attributes such as inertial properties of robot links and hyperparameters of the utilised physics solver.
+\paragraph{Domain Randomisation} Another way to easily expand the variety in data is by randomly changing the simulated environment. \citet{tobin_domain_2017} applied this method in order to randomise visual attributes shown in \autoref{fig:sim2real_domain_randomisation}, such as object colours, table texture, camera pose and characteristics of the illumination. Furthermore, domain randomisation can be extended also to other non-visual simulation attributes such as inertial properties of robot links and hyperparameters of the utilised physics solver.
 
 \begin{figure}[ht]
     \centering
     \begin{subfigure}[ht]{0.745\textwidth}
         \centering
-        \includegraphics[height=3.75cm]{related_work/sim2real_randomization_synthetic.png}
+        \includegraphics[height=3.75cm]{related_work/sim2real_randomisation_synthetic.png}
         \caption*{Randomised}
     \end{subfigure}%
     ~
     \begin{subfigure}[ht]{0.245\textwidth}
         \centering
-        \includegraphics[height=3.75cm]{related_work/sim2real_randomization_real.png}
+        \includegraphics[height=3.75cm]{related_work/sim2real_randomisation_real.png}
         \caption*{Real}
     \end{subfigure}%
-    \caption{Example of domain randomization for visual attributes.~\protect\cite{tobin_domain_2017}}
-    \label{fig:sim2real_domain_randomization}
+    \caption{Example of domain randomisation for visual attributes.~\protect\cite{tobin_domain_2017}}
+    \label{fig:sim2real_domain_randomisation}
 \end{figure}
 
 
