@@ -8,6 +8,8 @@ Compiled PDF: [**master_thesis.pdf**](./master_thesis.pdf)
     <img src="./graphics/_readme/frontpage.svg" width="30%">
 </a>
 
+Accompanying recordings can be viewed under [YouTube playlist](https://youtube.com/playlist?list=PLzcIGFRbGF3Qr4XSzAjNwOMPaeDn5J6i1). Data acquired during experimental evaluation can be found inside [experimental_evaluation directory](./experimental_evaluation).
+
 ## Disclaimer (LaTeX Template)
 
 Parts of frontmatter are adapted from [jkjaer/aauLatexTemplates](https://github.com/jkjaer/aauLatexTemplates) and modified for use with `memoir` class.
