@@ -125,9 +125,7 @@ Having a performant simulation accelerates the data collection, which can in tur
 
 \bigskip
 
-With performance in mind, the control rate of RL agent is set to a lower frequency of~2.5~Hz. This is because the agent only provides high-level control, whereas the motion planner and low-level joint controllers take care of interactions that require faster reaction times.
-% TODO: Add RTF (test_env)
-
+With performance in mind, the control rate of RL agent is set to a lower frequency of~2.5~Hz. This is because the agent only provides high-level control, whereas the motion planner and low-level joint controllers take care of interactions that require faster reaction times. On a laptop with Intel Core i7-10875H CPU and Nvidia Quadro T2000 GPU, the simulated environment with physics and the aforementioned perception progresses at real-time factor of~329\% for a single object and~196\% for four objects.
 
 \subsection{Domain Randomisation}\label{sec:impl_domain_randomisation}
 

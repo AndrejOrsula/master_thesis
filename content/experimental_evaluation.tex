@@ -57,8 +57,8 @@ TD3, SAC and TQC were trained using the same grasping environment with a network
         \centering
         \begin{tabular}{c|ccc}
                                           & \textbf{TQC} & \textbf{SAC} & \textbf{TD3} \\ \hline
-            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & XX\%         & XX\%         & XX\%         \\[4mm]
-            \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular} & XX           & XX           & XX
+            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & 77\%         & 64\%         & 0\%          \\[4mm]
+            \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular} & 14.0         & 29.8         & ---
         \end{tabular}
         \caption*{\textit{Evaluation on novel scenes}}
     \end{subfigure}%
@@ -102,8 +102,8 @@ The three different feature extractors are first trained in the fully randomised
         \centering
         \begin{tabular}{c|ccc}
                                           & \textbf{Octree} & \textbf{RGB-D} & \textbf{RGB} \\ \hline
-            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & XX\%            & XX\%           & XX\%         \\[4mm]
-            \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular} & XX              & XX             & XX
+            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & 77\%          & 5\%            & 3\%          \\[4mm]
+            \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular} & 14.0            & 36.5           & 51.0
         \end{tabular}
         \caption*{\textit{Evaluation on novel scenes}}
     \end{subfigure}%
@@ -129,8 +129,8 @@ Therefore, this experiment is repeated for an environment where the camera pose 
         \centering
         \begin{tabular}{c|ccc}
                                            & \textbf{Octree} & \textbf{RGB-D} & \textbf{RGB} \\ \hline
-            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & XX\%            & XX\%           & XX\%         \\[4mm]
-            \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular} & XX              & XX             & XX
+            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & 81.5\%            & 59\%           & 35\%         \\[4mm]
+            \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular} & 24.6            & 9.4            & 9.3
         \end{tabular}
         \caption*{\textit{Evaluation on novel scenes}}
     \end{subfigure}%
@@ -148,16 +148,18 @@ Lastly, comparison of memory usage and computational time is presented in \autor
 \begin{table}[ht]
     \centering
     \begin{tabular}{r|ccc}
-                                                      &
-        \textbf{Octree}                               & \textbf{RGB-D} & \textbf{RGB}                             \\ \hline
-        \multirow{2}{*}{Size \textit{(per sample)}}   & XXX (average)  & \multirow{2}{*}{X} & \multirow{2}{*}{XX} \\
-                                                      & XXX (maximum)  &                    &                     \\[1mm]
-        Pre-processing \textit{(average, per sample)} & X              & ---                & ---                 \\
-        Forward \textit{(average, per sample)}        & X              & X                  & X                   \\
-        Forward \textit{(average, batch of 32)}       & X              & X                  & X                   \\
-        Update \textit{(average, batch of 32)}        & X              & X                  & X
+                                                        &
+        \textbf{Octree}                                 & \textbf{RGB-D}             & \textbf{RGB}                                     \\ \hline
+        Resolution \textit{(per sample)}                & 16\(\times\)16\(\times\)16 & 128\(\times\)128       & 128\(\times\)128        \\
+        Cell Count \textit{(per sample)}                & 4096 octets (theoretical)  & 16384 px               & 16384 px                \\
+        \multirow{2}{*}{Size \textit{(per sample)}}     & 27 kB (average)            & \multirow{2}{*}{49 kB} & \multirow{2}{*}{115 kB} \\
+                                                        & 44 kB (maximum)            &                        &                         \\ \hline
+        Pre-processing \textit{(average, per sample)}   & 7.2 ms                     & ---                    & ---                     \\
+        Batch Formation \textit{(average, batch of 32)} & 3.2 ms                     & 19.7 ms                & 11.2 ms                 \\
+        Forward \textit{(average, batch of 32)}         & 2.1 ms                     & 0.8 ms                 & 0.7 ms                  \\
+        TQC Update \textit{(average, batch of 32)}      & 32.4 ms                    & 141.7 ms               & 82.3 ms
     \end{tabular}
-    \caption{Comparison of computational complexity for RGB, RGB-D and octree-based observations with their corresponding feature extractors. Pre-processing is performed during data collection and consists of point cloud processing, estimation of normals and creation of octree.}
+    \caption{Comparison of computational complexity for octree, RGB and RGB-D observations with their corresponding feature extractors. Pre-processing of octrees is performed during data collection and consists of point cloud processing, estimation of normals and creation of octree. Colour features are stored in octree as 32-bit floating point values, whereas RGB and RGB-D utilise byte array for memory efficiency in order to allow use of the same replay buffer size. Therefore, the time of batch formation includes conversion of colour channels to floating point values for RGB and RGB-D images.}
     \label{tab:feature_extractor_memory_and_computational_time}
 \end{table}
 
@@ -190,8 +192,8 @@ In addition to training agents with octree observations on UR5 robot with RG2 gr
         \centering
         \begin{tabular}{c|cc}
                                            & \textbf{UR5} & \textbf{Panda} \\ \hline
-            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & XX\%         & XX\%           \\[4mm]
-            \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular} & XX           & XX
+            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & 77\%         & 61.5\%         \\[4mm]
+            \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular} & 14.0         & 27.1
         \end{tabular}
         \caption*{\textit{Evaluation on novel scenes}}
     \end{subfigure}%
@@ -211,8 +213,8 @@ Furthermore, feasibility of transferring a policy trained on one robot to anothe
     \begin{tabular}{cr|cc}
                                                         &                & \multicolumn{2}{c}{Evaluation}                  \\
                                                         &                & \textbf{UR5}                   & \textbf{Panda} \\ \hline
-        \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Training\end{tabular}} & \textbf{UR5}   & UR5/UR5                        & UR5/Panda      \\
-                                                        & \textbf{Panda} & Panda/UR5                      & Panda/Panda
+        \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Training\end{tabular}} & \textbf{UR5}   & 77\%                           & 27.5\%         \\
+                                                        & \textbf{Panda} & 75\%                           & 61.5\%
     \end{tabular}
     \caption{Comparison of success rate on novel scenes for policies trained one robot and evaluated on another. UR5 robot with RG2 gripper and Panda robot with its default gripper were evaluated.}
     \label{tab:results_robot_transfer}
@@ -266,10 +268,10 @@ Besides results presented in the previous section, various ablations of the full
             \textbf{\begin{tabular}[c]{@{}c@{}}No\\Colour\\Features\end{tabular}} &
             \textbf{\begin{tabular}[c]{@{}c@{}}No\\Proprio-\\ceptive\end{tabular}} &
             \textbf{\begin{tabular}[c]{@{}c@{}}Separate\\Actor-\\Critic FE\end{tabular}} &
-            \textbf{\begin{tabular}[c]{@{}c@{}}Shared\\Stack\\FE\end{tabular}}                                                  \\ \hline
-            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular}          & XX\% & XX\% & XX\% & XX\% & XX\% & XX\% & XX\% \\[4mm]
+            \textbf{\begin{tabular}[c]{@{}c@{}}Shared\\Stack\\FE\end{tabular}}                                                        \\ \hline
+            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular}          & 77\% & 84\% & 70.5\% & 66.5\% & 75\% & 68.5\% & 79\% \\[4mm]
 
-            \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular}          & XX   & XX   & XX   & XX   & XX   & XX   & XX
+            \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular}          & 14.0 & 24.5 & 19.9   & 29.4   & 23.0 & 27.5   & 22.8
         \end{tabular}
         \caption*{\textit{Evaluation on novel scenes}}
     \end{subfigure}%
