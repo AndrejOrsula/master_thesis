@@ -64,13 +64,23 @@ With this information, description that uses Simulation Description Format (SDF)
 
 \subsubsection{RGB-D Perception}
 
-In order to acquire visual observations from the environment, a virtual RGB-D camera is utilised. Using OGRE~2 rendering engine, it provides aligned RGB image and depth map simultaneously. For both, the resolution is set to~256\({\times}\)256~px with a field of view of~52\textdegree. Framerate of the camera is set to~10~FPS. Gaussian noise~\(\mathcal{N}(0, 0.001)\) is added to both RGB and depth data in order to increase the realism of observations. This effect is shown in \autoref{fig:rgbd_camera_noise} on the resulting point cloud. Since the pose of camera is known with respect to the robot, the acquired point cloud is then transformed into the robot base coordinate frame.
+In order to acquire visual observations from the environment, a virtual RGB-D camera is utilised. Using OGRE~2 rendering engine, it provides aligned RGB image and depth map simultaneously. For both, the resolution is set to~256\({\times}\)256~px with a field of view of~52\textdegree. Framerate of the camera is set to~10~FPS. Gaussian noise~\(\mathcal{N}(0, 0.001)\) is added to both RGB and depth data in order to increase the realism of observations. This effect is shown in \autoref{fig:point_cloud_noise} on the resulting point cloud. Since the pose of camera is known with respect to the robot, the acquired point cloud is then transformed into the robot base coordinate frame.
 
 \begin{figure}[ht]
     \centering
-    % \includegraphics[width=0.75\textwidth]{implementation/rgbd_noise.pdf}
-    \caption{Effect of adding Gaussian noise to RGB-D data in order to improve resemblance to real-world visual perception.}
-    \label{fig:rgbd_camera_noise}
+    \begin{subfigure}[ht]{0.325\textwidth}
+        \begin{flushleft}%
+            \includegraphics[width=1.0\textwidth]{implementation/workspace.png}
+        \end{flushleft}%
+    \end{subfigure}%
+    ~\vrule~%
+    \begin{subfigure}[ht]{0.65\textwidth}
+        \begin{flushright}%
+            \includegraphics[width=1.0\textwidth]{implementation/point_cloud_noise.pdf}
+        \end{flushright}%
+    \end{subfigure}%
+    \caption{Effect of adding Gaussian noise to RGB-D data in order to improve resemblance to noise of real-world camera sensors.}
+    \label{fig:point_cloud_noise}
 \end{figure}
 
 
@@ -137,7 +147,7 @@ Examples of fully randomised scenes are shown in \autoref{fig:impl_domain_random
 
 \begin{figure}[ht]
     \centering
-    % \includegraphics[width=1.0\textwidth]{implementation/domain_randomisation.png}
+    \includegraphics[width=1.0\textwidth]{implementation/domain_randomisation.png}
     \caption{Examples of domain randomisation applied to the implemented simulated environment for robotic grasping.}
     \label{fig:impl_domain_randomisation}
 \end{figure}
@@ -175,13 +185,13 @@ First, an octree is constructed from the aforementioned transformed point cloud 
 
 Maximum depth of the octree was selected as~\(d_{max}\)~=~\(4\) in order to provide metric resolution of each finest leaf octant of~1.5\({\times}\)1.5\({\times}\)1.5~cm. This depth was found to provide enough detail for grasping of objects from the utilised dataset, while not slowing down the training due to enormous number of cells. Every octree therefore contains a theoretical maximum of~4096 cells, however, an average of~13\% of these cells are occupied at any given time in the created simulation environment. This is primarily because only a single view of the scene is used, where each occlusion prohibits the formation of new cells in the occluded regions behind the visible surfaces. Therefore, it is expected that for each additional depth, the workspace volume can be increased eightfold for the utilised dataset while the actual number of occupied cells would be increased at a much slower rate.
 
-As it was previously described in \autoref{subsec:problem_formulation_octree}, each occupied finest leaf octant contains the average unit normal vector~\(\overline{n}\), the average distance between the centre of the cell and points that formed it~\(\overline{d}\), and the average colour~\(\overline{rgb}\). All of these features are extracted directly from the point cloud that is used to create the octree, where each octet considers only the points that belong to its volume. Since the cropped point cloud does not contain normals, these are estimated for each point from their nearest neighbourhood, where maximum of~10 closest neighbours at a maximum distance of~5~cm are considered. Position of the camera is then used to orient all normals correctly. Once these are found, an octree is created from the point cloud by hierarchical subdivision of the cells. An example of created octree is visualised in \autoref{fig:octree_visualisation}.
+As it was previously described in \autoref{subsec:problem_formulation_octree}, each occupied finest leaf octant contains the average unit normal vector~\(\overline{n}\), the average distance between the centre of the cell and points that formed it~\(\overline{d}\), and the average colour~\(\overline{rgb}\). All of these features are extracted directly from the point cloud that is used to create the octree, where each octet considers only the points that belong to its volume. Since the cropped point cloud does not contain normals, these are estimated for each point from their nearest neighbourhood, where maximum of~10 closest neighbours at a maximum distance of~5~cm are considered. Position of the camera is then used to orient all normals correctly. Once these are found, an octree is created from the point cloud by hierarchical subdivision of the cells. An example of created octree is visualised in \autoref{fig:octree_example}.
 
 \begin{figure}[ht]
     \centering
-    % \includegraphics[width=1.0\textwidth]{implementation/octree_visualisation.pdf}
-    \caption{Octree that created from a corresponding point cloud of the scene. In this visualisation, each finest leaf octet is represented as a square that is oriented by~\(\overline{n}\) and offset from the centre of the octet by~\(\overline{d}\). Furthermore, each octet is colourised with its corresponding~\(\overline{rgb}\) feature.}
-    \label{fig:octree_visualisation}
+    \includegraphics[width=0.666667\textwidth]{implementation/octree_example.pdf}
+    \caption{An octree that is formed from a volume of the observable workspace. In this visualisation, each finest leaf octet is represented as a square that is oriented by~\(\overline{n}\) and offset from the centre of the octet by~\(\overline{d}\). Furthermore, each octet is colourised with its corresponding~\(\overline{rgb}\) feature.}
+    \label{fig:octree_example}
 \end{figure}
 
 
