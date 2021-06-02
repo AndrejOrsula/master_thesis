@@ -116,7 +116,7 @@ The three different feature extractors are first trained in the fully randomised
     \label{fig:training_curve_comparison_2d_2_5d_3d_random_camera_pose}
 \end{figure}
 
-Therefore, this experiment is repeated for an environment where the camera pose is static and remains unchanged throughout the entire training and subsequent evaluation on novel scenes. \hyperref[fig:training_curve_comparison_2d_2_5d_3d_fixed_camera_pose]{\figurename~\ref*{fig:training_curve_comparison_2d_2_5d_3d_fixed_camera_pose}~\&~\tablename~\ref*{tab:training_curve_comparison_2d_2_5d_3d_fixed_camera_pose}} provides results for such environment with reduced domain randomisation.
+Therefore, this experiment is repeated for an environment where the camera pose is static and remains unchanged throughout the entire training and subsequent evaluation on novel scenes. \hyperref[fig:training_curve_comparison_2d_2_5d_3d_fixed_camera_pose]{\figurename~\ref*{fig:training_curve_comparison_2d_2_5d_3d_fixed_camera_pose}~\&~\tablename~\ref*{tab:training_curve_comparison_2d_2_5d_3d_fixed_camera_pose}} provide results for such environment with reduced domain randomisation.
 
 \begin{figure}[ht]
     \centering
@@ -152,7 +152,7 @@ Lastly, a comparison of memory usage and computational time for the three observ
     \begin{tabular}{r|ccc}
                                                         &
         \textbf{Octree}                                 & \textbf{RGB-D}             & \textbf{RGB}                                     \\ \hline
-        Shape \textit{(per sample)}                & 16\(\times\)16\(\times\)16 & 128\(\times\)128       & 128\(\times\)128        \\
+        Shape \textit{(per sample)}                     & 16\(\times\)16\(\times\)16 & 128\(\times\)128       & 128\(\times\)128        \\
         Cell Count \textit{(per sample)}                & 4096 octets (theoretical)  & 16384 px               & 16384 px                \\
         \multirow{2}{*}{Size \textit{(per sample)}}     & 27 kB (average)            & \multirow{2}{*}{49 kB} & \multirow{2}{*}{115 kB} \\
                                                         & 44 kB (maximum)            &                        &                         \\ \hline
@@ -214,7 +214,7 @@ Furthermore, feasibility of transferring a policy trained on one robot to anothe
 
 \subsection{Sim-to-Real Transfer}
 
-Finally, an agent trained inside simulation is evaluated in real-world domain to study the feasibility of sim-to-real transfer for environment with domain randomisation and octree-based observations. Setup described in \autoref{subsec:real_setup} is used, where objects are randomly replaced after each success or after~100 time steps have elapsed. With this setup,~41 out of~60 episodes were successful, which results in a success rate of~68.3\%. \autoref{fig:sim_to_real_success_examples} shows few examples of successful grasps and a recording is available on YouTube\footnote{\href{https://youtube.com/watch?v=btxqzFOgCyQ&list=PLzcIGFRbGF3Qr4XSzAjNwOMPaeDn5J6i1}{https://youtube.com/watch?v=btxqzFOgCyQ}}.
+Finally, an agent trained inside simulation is evaluated in real-world domain to study the feasibility of sim-to-real transfer for environment with domain randomisation and octree-based observations. Setup described in \autoref{subsec:real_setup} is used, where objects are randomly replaced after each success or after~100 time steps have elapsed. With this setup,~41 out of~60 episodes were successful, which results in a success rate of~68.3\%. \autoref{fig:sim_to_real_success_examples} shows examples of successful grasps, whereas \autoref{fig:sim_to_real_failure_examples} shows failed attempts. Recording of several episodes is available on YouTube\footnote{\href{https://youtube.com/watch?v=btxqzFOgCyQ&list=PLzcIGFRbGF3Qr4XSzAjNwOMPaeDn5J6i1}{https://youtube.com/watch?v=btxqzFOgCyQ}}, which can be used to qualitatively assess the policy and corresponding grasps.
 
 \begin{figure}[ht]
     \centering
@@ -223,23 +223,30 @@ Finally, an agent trained inside simulation is evaluated in real-world domain to
     \label{fig:sim_to_real_success_examples}
 \end{figure}
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1.0\textwidth]{experimental_evaluation/real_failure_examples.png}
+    \caption{Examples of failed attempts. The most common cause of failure is obstruction of a finger by another object, which prevents the RG2 gripper from closing.}
+    \label{fig:sim_to_real_failure_examples}
+\end{figure}
+
 \newpage
 
 \section{Ablation Studies}
 
-Besides results presented in the previous section, various ablations of the full approach are studied in order to determine contributions of its components. It is believed that these results are applicable also for other robotics tasks that utilise visual observations. The following ablations and configurations are studied.
+Besides results presented in the previous section, various ablations of the full approach are studied in order to determine their effects and contributions. It is believed that these results are applicable also for other robotics tasks that utilise visual observations. The following ablations and configurations are studied.
 \vspace{-\topsep}
 \begin{itemize}
     \itemsep -2.5mm
-    \item No Demonstrations
-    \item No Curriculum
-    \item No Colour Features
-    \item No Proprioceptive Observations
-    \item Separate Feature Extractors for Actor and Critics
-    \item Shared Feature Extractor for all Stacked Observations
+    \item No demonstrations
+    \item No curriculum
+    \item No colour features
+    \item No proprioceptive observations
+    \item Separate feature extractors for actor and critics
+    \item Shared feature extractor for all stacked observations
 \end{itemize}
 \vspace{-\topsep}
-\hyperref[fig:ablation_studies]{\figurename~\ref*{fig:ablation_studies}~\&~\tablename~\ref*{tab:ablation_studies}} presents these ablations with respect to their comparative learning curve and attainable success rate on novel scenes.
+\hyperref[fig:ablation_studies]{\figurename~\ref*{fig:ablation_studies}~\&~\tablename~\ref*{tab:ablation_studies}} present these ablations with respect to their comparative learning curve and attainable success rate on novel scenes.
 
 \begin{figure}[ht]
     \centering
@@ -271,6 +278,6 @@ Besides results presented in the previous section, various ablations of the full
     \addtocounter{table}{1}
     \captionlistentry[table]{}
     \label{tab:ablation_studies}
-    \caption{Success rate of various ablations of the full method with octree observations. (FE -- Feature Extractor)}
+    \caption{Results of various ablations of the full method. (FE -- Feature Extractor)}
     \label{fig:ablation_studies}
 \end{figure}
