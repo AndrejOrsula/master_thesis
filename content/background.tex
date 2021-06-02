@@ -5,7 +5,7 @@ A theoretical overview of RL foundation based on \citet{sutton_reinforcement_201
 
 \section{Markov Decision Process}
 
-The goal of RL agent is to maximize the total reward that is accumulated during a sequential interaction with the environment. This paradigm can be expressed with a classical formulation of Markov decision process (MDP), where \autoref{fig:bg_mdp_loop} illustrates its basic interaction loop. In MDPs, actions of agent within the environment make it traverse different states and receive corresponding rewards. MDP is an extension of Markov chains, with an addition that agents are allowed to select the actions they execute. Both of these satisfy the Markov property, which assumes that each state is only dependent on the previous state, i.e.~a memoryless property where each state contains all information that is necessary to predict the next state. Therefore, MDP formulation is commonly used within the context of RL because it captures a variety of tasks that general-purpose RL algorithms can be applied to, including robotic manipulation tasks.
+The goal of RL agent is to maximise the total reward that is accumulated during a sequential interaction with the environment. This paradigm can be expressed with a classical formulation of Markov decision process (MDP), where \autoref{fig:bg_mdp_loop} illustrates its basic interaction loop. In MDPs, actions of agent within the environment make it traverse different states and receive corresponding rewards. MDP is an extension of Markov chains, with an addition that agents are allowed to select the actions they execute. Both of these satisfy the Markov property, which assumes that each state is only dependent on the previous state, i.e.~a memoryless property where each state contains all information that is necessary to predict the next state. Therefore, MDP formulation is commonly used within the context of RL because it captures a variety of tasks that general-purpose RL algorithms can be applied to, including robotic manipulation tasks.
 
 It should be noted that partially observable Markov decision process (POMDP) is a more accurate characterisation of most robotics tasks because the states are commonly unobservable or only partially observable, however, the difficulty of solving POMDPs limits their usage \cite{kroemer_review_2021}. Therefore, this chapter presents only on MDPs where observations and states are considered to be the same.
 
@@ -85,7 +85,7 @@ The benefit of utilising NNs as a function approximator for deep Q-learning is t
 
 \subsection{Policy-Based Methods}
 
-Instead of determining actions based on their value, policy-based methods directly optimize a stochastic policy~\(\pi\) as a probability distribution~\(\pi(a \vert s, \theta)\) that is parameterised by~\(\theta\).
+Instead of determining actions based on their value, policy-based methods directly optimise a stochastic policy~\(\pi\) as a probability distribution~\(\pi(a \vert s, \theta)\) that is parameterised by~\(\theta\).
 \begin{equation}
     \pi(a \vert s, \theta) = \Pr\{A_{t}{=}a \vert S_{t}{=}s, \theta_{t}{=}\theta \}
 \end{equation}
@@ -98,7 +98,7 @@ Policy-based algorithms are typically on-policy and therefore less sample-effici
 
 In contrast to value- and policy-based methods as the two primary categories, actor-critic methods include algorithms that utilise both a parameterised policy, i.e.~actor, and a value function, critic. This is achieved by using separate networks, where the actor and critic can sometimes share some common parameters. Such combination allows actor-critic algorithms to simultaneously possess advantages of both approaches such as sample efficiency and continuous action space. Therefore, these properties have made actor-critic methods popular for robotic manipulation while achieving state of the art performance among other RL approaches in this domain.
 
-Similar to policy-based methods, the actor network learns the probability of selecting a specific action~\(a\) in a given state~\(s\) as~\(\pi(a \vert s, \theta)\). The critic network estimates action-value function~\(Q(s, a)\) by minimising TD error~\(\delta_{t}\) via \autoref{eq:q_learning}, which is used to critique the actor based on how good the selected action is. This process is visualized in \autoref{fig:bg_actor_critic_loop}. It is however argued that the co-dependence of each other's output distribution can result in instability during learning and make them difficult to tune \cite{quillen_deep_2018}. Despite of this, actor-critic model-free RL algorithms are utilised in this work.
+Similar to policy-based methods, the actor network learns the probability of selecting a specific action~\(a\) in a given state~\(s\) as~\(\pi(a \vert s, \theta)\). The critic network estimates action-value function~\(Q(s, a)\) by minimising TD error~\(\delta_{t}\) via \autoref{eq:q_learning}, which is used to critique the actor based on how good the selected action is. This process is visualised in \autoref{fig:bg_actor_critic_loop}. It is however argued that the co-dependence of each other's output distribution can result in instability during learning and make them difficult to tune \cite{quillen_deep_2018}. Despite of this, actor-critic model-free RL algorithms are utilised in this work.
 
 \begin{figure}[ht]
     \centering

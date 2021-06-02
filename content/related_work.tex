@@ -43,7 +43,7 @@ Another empirical method is based on the process of learning tasks from demonstr
 Behavioural cloning is the simplest form of imitation learning, in which a policy that directly maps states to actions is learned through techniques such as non-linear regression or support vector machines \cite{osa_algorithmic_2018}. Recently, \citet{zhang_deep_2018} showed that DL allows behavioural cloning to be an effective way for robots to acquire complex skills. They used a virtual reality headset and hand-tracking controller to acquire teleoperated demonstrations in the form of RGB-D images, which were subsequently used to train a deep policy by the use of CNN. With this approach, \citeauthor{zhang_deep_2018} managed to train a simple grasping task with one object to~\(97\)\% success rate while using 180 distinct demonstrations. Learning from observation is an emerging category that similarly aims to learn policy from visual demonstrations but without any labels associated with them, where the state might not be fully known \cite{kroemer_review_2021}.
 
 % Difficulties
-Even though imitation learning provides a quick way of acquiring new policies, demonstrations usually do not contain all possible states that the robot might experience because collecting expert demonstrations for all scenarios can become too expensive and time-consuming \cite{osa_algorithmic_2018}. For this reason, the learned policy might struggle to generalize to novel objects and situations.
+Even though imitation learning provides a quick way of acquiring new policies, demonstrations usually do not contain all possible states that the robot might experience because collecting expert demonstrations for all scenarios can become too expensive and time-consuming \cite{osa_algorithmic_2018}. For this reason, the learned policy might struggle to generalise to novel objects and situations.
 
 
 \section{Reinforcement Learning}\label{sec:rw_reinforcement_learning}
@@ -159,14 +159,14 @@ Due to the popularity of training DRL agents inside simulations, there are sever
 \end{figure}
 
 
-\paragraph{Domain Randomization} Another way to easily expand the variety in data is by randomly changing the simulated environment. \citet{tobin_domain_2017} applied this method in order to randomize visual attributes shown in \autoref{fig:sim2real_domain_randomization}, such as object colours, table texture, camera pose and characteristics of the illumination. Furthermore, domain randomization can be extended also to other non-visual simulation attributes such as inertial properties of robot links and hyperparameters of the utilised physics solver.
+\paragraph{Domain Randomization} Another way to easily expand the variety in data is by randomly changing the simulated environment. \citet{tobin_domain_2017} applied this method in order to randomise visual attributes shown in \autoref{fig:sim2real_domain_randomization}, such as object colours, table texture, camera pose and characteristics of the illumination. Furthermore, domain randomization can be extended also to other non-visual simulation attributes such as inertial properties of robot links and hyperparameters of the utilised physics solver.
 
 \begin{figure}[ht]
     \centering
     \begin{subfigure}[ht]{0.745\textwidth}
         \centering
         \includegraphics[height=3.75cm]{related_work/sim2real_randomization_synthetic.png}
-        \caption*{Randomized}
+        \caption*{Randomised}
     \end{subfigure}%
     ~
     \begin{subfigure}[ht]{0.245\textwidth}

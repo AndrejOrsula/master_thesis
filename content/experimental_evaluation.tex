@@ -21,7 +21,7 @@ Real world setup shown in \autoref{fig:real_setup} is used to evaluate sim-to-re
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.75\textwidth]{experimental_evaluation/real_setup.png}
+    \includegraphics[width=0.66\textwidth]{experimental_evaluation/real_setup.png}
     \caption{UR5 robot with RG2 gripper and RealSense D435 camera in a setup that is used to evaluate sim-to-real transfer.}
     \label{fig:real_setup}
 \end{figure}
@@ -30,7 +30,7 @@ Real world setup shown in \autoref{fig:real_setup} is used to evaluate sim-to-re
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.75\textwidth]{experimental_evaluation/real_objects.png}
+    \includegraphics[width=0.66\textwidth]{experimental_evaluation/real_objects.png}
     \caption{A set of 18 objects that were used during the evaluation of sim-to-real transfer.}
     \label{fig:real_objects}
 \end{figure}
@@ -40,11 +40,11 @@ Real world setup shown in \autoref{fig:real_setup} is used to evaluate sim-to-re
 
 Results of the following experiments are presented in this section. First, actor-critic algorithms are compared on the created simulation environment in order to select the best performing one for the task of robotic grasping. Hereafter, octree-based 3D observations are compared to traditional 2D and 2.5D image observations, and studied with respect to camera pose invariance. Similarly, invariance to the utilised robot is evaluated for both training process and transfer of already learned policy. Lastly, results of sim-to-real transfer are presented.
 
-All agents were trained over the duration of~500,000 time steps, which is assumed to provide a comparative analysis among the different experiments from this work. It is expected, that the final performance for many of these agents can be improved with a longer training duration. On average, each agent takes~65~hours to complete~500,000 steps while training on a laptop with Intel Core i7-10875H CPU and Nvidia Quadro T2000 GPU. Therefore, only a single random seed is employed for all agents due to the time-consuming training procedure and time constraints. However, use of several different seeds with longer training duration is encouraged as it would provide more definitive results. During the training of each agent, success rate and episode lengths are logged for grasps on the training dataset while agent follows its current policy that also contains exploration noise and it is stochastic for SAC and TQC. After training, each agent is evaluated on novel scenes for~200 episodes, where deterministic actions are selected each step based on the learned policy.
+All agents were trained over the duration of~500,000 time steps, which is assumed to provide a comparative analysis among the different experiments from this work. It is expected, that the final performance for many of these agents can be improved with a longer training duration. On average, each agent takes~65~hours to complete~500,000 steps while training on a laptop with Intel Core i7-10875H CPU and Nvidia Quadro T2000 GPU. Therefore, only a single random seed is employed for all agents due to the time-consuming training procedure and time constraints. However, use of several different seeds with a longer training duration is encouraged as it would provide more definitive results. During the training of each agent, success rate is logged for grasps on the training dataset while the agent follows its current stochastic policy that contains exploration noise. After training, each agent is evaluated on novel scenes for~200 episodes, where deterministic actions are selected each step based on the learned policy.
 
 \subsection{Comparison of Actor-Critic Algorithms}
 
-TD3, SAC and TQC were trained using the same grasping environment with a network architecture presented in \autoref{subsec:actor_critic_network_architecture} and hyperparameters from \hyperref[app:hyperparameters]{appendix~\ref*{app:hyperparameters}}. The success rate during training and the final success rate on novel objects and textures is presented in \hyperref[fig:training_curve_comparison_actor_critic_algorithms]{\figurename~\ref*{fig:training_curve_comparison_actor_critic_algorithms}~\&~\tablename~\ref*{tab:training_curve_comparison_actor_critic_algorithms}} for all three algorithms.
+TQC, SAC and TD3 were trained using the same grasping environment with a network architecture presented in \autoref{subsec:actor_critic_network_architecture} and hyperparameters from \hyperref[app:hyperparameters]{appendix~\ref*{app:hyperparameters}}. The success rate during training and the final success rate on novel objects and textures is presented in \hyperref[fig:training_curve_comparison_actor_critic_algorithms]{\figurename~\ref*{fig:training_curve_comparison_actor_critic_algorithms}~\&~\tablename~\ref*{tab:training_curve_comparison_actor_critic_algorithms}} for all three algorithms. The episode lengths of successful episodes are also logged in order to determine how fast an agent can grasp previously unseen objects.
 
 \begin{figure}[ht]
     \centering
@@ -67,7 +67,7 @@ TD3, SAC and TQC were trained using the same grasping environment with a network
     \addtocounter{table}{1}
     \captionlistentry[table]{}
     \label{tab:training_curve_comparison_actor_critic_algorithms}
-    \caption{Success rate of TD3, SAC and TQC algorithms on the created grasping environment. All plots are processed with moving average,~\(n\)~=~\(100\), and exponential smoothing,~\(\alpha\)~=~\(0.002\).}
+    \caption{Comparison of TQC, SAC and TD3 algorithms on the created grasping environment. The training success rate is processed with a moving average,~\(n = 100\), and exponential smoothing,~\(\alpha = 0.002\), for all agents.}
     \label{fig:training_curve_comparison_actor_critic_algorithms}
 \end{figure}
 
@@ -85,7 +85,7 @@ Based on these results, TQC is utilised for all subsequent experiments.
         \textbf{Octree}      & \textbf{RGB-D} & \textbf{RGB}           \\ \hline
         Learnable Parameters & 226,494        & 229,680      & 229,248
     \end{tabular}
-    \caption{Number of learnable parameters per each observation stack for the utilised RGB, RGB-D and octree-based feature extractors.}
+    \caption{Number of learnable parameters per each observation stack for the utilised octree-based, RGB and RGB-D feature extractors.}
     \label{tab:feature_extractor_number_of_learnable_parameters_comparison}
 \end{table}
 
@@ -102,7 +102,7 @@ The three different feature extractors are first trained in the fully randomised
         \centering
         \begin{tabular}{c|ccc}
                                           & \textbf{Octree} & \textbf{RGB-D} & \textbf{RGB} \\ \hline
-            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & 77\%          & 5\%            & 3\%          \\[4mm]
+            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & 77\%            & 5\%            & 3\%          \\[4mm]
             \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular} & 14.0            & 36.5           & 51.0
         \end{tabular}
         \caption*{\textit{Evaluation on novel scenes}}
@@ -112,7 +112,7 @@ The three different feature extractors are first trained in the fully randomised
     \addtocounter{table}{1}
     \captionlistentry[table]{}
     \label{tab:training_curve_comparison_2d_2_5d_3d_random_camera_pose}
-    \caption{Success rate of RGB, RGB-D and octree-based feature extractors on environment with randomised camera pose.}
+    \caption{Results of octree-based, RGB and RGB-D feature extractors on the full environment that randomises camera pose on each episode.}
     \label{fig:training_curve_comparison_2d_2_5d_3d_random_camera_pose}
 \end{figure}
 
@@ -129,7 +129,7 @@ Therefore, this experiment is repeated for an environment where the camera pose 
         \centering
         \begin{tabular}{c|ccc}
                                            & \textbf{Octree} & \textbf{RGB-D} & \textbf{RGB} \\ \hline
-            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & 81.5\%            & 59\%           & 35\%         \\[4mm]
+            \begin{tabular}[c|]{@{}c@{}}Success\\Rate\end{tabular} & 81.5\%          & 59\%           & 35\%         \\[4mm]
             \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular} & 24.6            & 9.4            & 9.3
         \end{tabular}
         \caption*{\textit{Evaluation on novel scenes}}
@@ -139,18 +139,20 @@ Therefore, this experiment is repeated for an environment where the camera pose 
     \addtocounter{table}{1}
     \captionlistentry[table]{}
     \label{tab:training_curve_comparison_2d_2_5d_3d_fixed_camera_pose}
-    \caption{Success rate of RGB, RGB-D and octree-based feature extractors on environment with a fixed camera pose.}
+    \caption{Results of octree-based, RGB and RGB-D feature extractors on environment with a fixed camera pose.}
     \label{fig:training_curve_comparison_2d_2_5d_3d_fixed_camera_pose}
 \end{figure}
 
-Lastly, comparison of memory usage and computational time is presented in \autoref{tab:feature_extractor_memory_and_computational_time}.
+\newpage
+
+Lastly, a comparison of memory usage and computational time for the three observation types and feature extractors is presented in \autoref{tab:feature_extractor_memory_and_computational_time}.
 
 \begin{table}[ht]
     \centering
     \begin{tabular}{r|ccc}
                                                         &
         \textbf{Octree}                                 & \textbf{RGB-D}             & \textbf{RGB}                                     \\ \hline
-        Resolution \textit{(per sample)}                & 16\(\times\)16\(\times\)16 & 128\(\times\)128       & 128\(\times\)128        \\
+        Shape \textit{(per sample)}                & 16\(\times\)16\(\times\)16 & 128\(\times\)128       & 128\(\times\)128        \\
         Cell Count \textit{(per sample)}                & 4096 octets (theoretical)  & 16384 px               & 16384 px                \\
         \multirow{2}{*}{Size \textit{(per sample)}}     & 27 kB (average)            & \multirow{2}{*}{49 kB} & \multirow{2}{*}{115 kB} \\
                                                         & 44 kB (maximum)            &                        &                         \\ \hline
@@ -159,28 +161,16 @@ Lastly, comparison of memory usage and computational time is presented in \autor
         Forward \textit{(average, batch of 32)}         & 2.1 ms                     & 0.8 ms                 & 0.7 ms                  \\
         TQC Update \textit{(average, batch of 32)}      & 32.4 ms                    & 141.7 ms               & 82.3 ms
     \end{tabular}
-    \caption{Comparison of computational complexity for octree, RGB and RGB-D observations with their corresponding feature extractors. Pre-processing of octrees is performed during data collection and consists of point cloud processing, estimation of normals and creation of octree. Colour features are stored in octree as 32-bit floating point values, whereas RGB and RGB-D utilise byte array for memory efficiency in order to allow use of the same replay buffer size. Therefore, the time of batch formation includes conversion of colour channels to floating point values for RGB and RGB-D images.}
+    \caption{Comparison of computational complexity for octree-based, RGB and RGB-D observations with their corresponding feature extractors. Pre-processing of octrees is performed during data collection and consists of point cloud processing, estimation of normals and creation of octree. Colour features are stored in octree as 32-bit floating point values, whereas RGB and RGB-D utilise byte arrays for memory efficiency in order to allow use of the same replay buffer size. Therefore, the time of batch formation includes conversion of colour channels to floating point values for RGB and RGB-D images.}
     \label{tab:feature_extractor_memory_and_computational_time}
 \end{table}
 
-
-\subsection{Invariance to Camera Pose}
-
-Based on the results of the previous experiment, agent with octree observations and fully randomised camera pose is evaluated with respect to its learned generalisation to different camera poses on novel scenes. A total of X various poses with different azimuth and height are evaluated, with corresponding results shown in \autoref{fig:invariance_to_camera_pose}.
-
-\begin{figure}[ht]
-    \centering
-    % \includegraphics[width=1.0\textwidth]{experimental_evaluation/.pdf}
-    \caption{Success rate to novel scenes for different camera poses.}
-    \label{fig:invariance_to_camera_pose}
-\end{figure}
-
+\newpage
 
 \subsection{Invariance to Robot}
 
 In addition to training agents with octree observations on UR5 robot with RG2 gripper, an agent is also trained on Panda robot in order to study the robustness of state-of-the-art actor-critic algorithm with octree observations to different kinematic chains and gripper designs. Comparison of success rate between UR5 and Panda can be seen in \hyperref[fig:invariance_to_robot]{\figurename~\ref*{fig:invariance_to_robot}~\&~\tablename~\ref*{tab:invariance_to_robot}}.
 
-% Consider skipping this figure if section gets too crowded
 \begin{figure}[ht]
     \centering
     \begin{subfigure}[ht]{0.5845\textwidth}
@@ -202,7 +192,7 @@ In addition to training agents with octree observations on UR5 robot with RG2 gr
     \addtocounter{table}{1}
     \captionlistentry[table]{}
     \label{tab:invariance_to_robot}
-    \caption{Success rate of UR5 and Panda robots using the same environment, algorithm and hyperparameters.}
+    \caption{Results of using the same algorithm and hyperparameters on the created environment with UR5 and Panda robots.}
     \label{fig:invariance_to_robot}
 \end{figure}
 
@@ -216,14 +206,15 @@ Furthermore, feasibility of transferring a policy trained on one robot to anothe
         \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Training\end{tabular}} & \textbf{UR5}   & 77\%                           & 27.5\%         \\
                                                         & \textbf{Panda} & 75\%                           & 61.5\%
     \end{tabular}
-    \caption{Comparison of success rate on novel scenes for policies trained one robot and evaluated on another. UR5 robot with RG2 gripper and Panda robot with its default gripper were evaluated.}
+    \caption{Comparison of success rate on novel scenes for policies trained on one robot and evaluated on another, for UR5 with RG2 gripper and Panda robot with its default gripper.}
     \label{tab:results_robot_transfer}
 \end{table}
 
+\newpage
 
 \subsection{Sim-to-Real Transfer}
 
-Finally, an agent trained inside simulation is evaluated in real-world domain to study the feasibility of sim-to-real transfer for environment with extensive domain randomisation and octree-based observations. Setup described in \autoref{subsec:real_setup} is used, where objects are randomly replaced after each success or~100 time steps. With this setup,~41 out of~60 episodes were successful, which results in a success rate of~68\%. \autoref{fig:sim_to_real_success_examples} shows few examples of successful grasps and a recording is available on YouTube\footnote{\href{https://youtube.com/watch?v=btxqzFOgCyQ&list=PLzcIGFRbGF3Qr4XSzAjNwOMPaeDn5J6i1}{https://youtube.com/watch?v=btxqzFOgCyQ}}.
+Finally, an agent trained inside simulation is evaluated in real-world domain to study the feasibility of sim-to-real transfer for environment with domain randomisation and octree-based observations. Setup described in \autoref{subsec:real_setup} is used, where objects are randomly replaced after each success or after~100 time steps have elapsed. With this setup,~41 out of~60 episodes were successful, which results in a success rate of~68.3\%. \autoref{fig:sim_to_real_success_examples} shows few examples of successful grasps and a recording is available on YouTube\footnote{\href{https://youtube.com/watch?v=btxqzFOgCyQ&list=PLzcIGFRbGF3Qr4XSzAjNwOMPaeDn5J6i1}{https://youtube.com/watch?v=btxqzFOgCyQ}}.
 
 \begin{figure}[ht]
     \centering
@@ -232,6 +223,7 @@ Finally, an agent trained inside simulation is evaluated in real-world domain to
     \label{fig:sim_to_real_success_examples}
 \end{figure}
 
+\newpage
 
 \section{Ablation Studies}
 
@@ -273,7 +265,6 @@ Besides results presented in the previous section, various ablations of the full
 
             \begin{tabular}[c|]{@{}c@{}}Episode\\Length\end{tabular}          & 14.0 & 24.5 & 19.9   & 29.4   & 23.0 & 27.5   & 22.8
         \end{tabular}
-        \caption*{\textit{Evaluation on novel scenes}}
     \end{subfigure}%
     \captionsetup{labelformat=figure_and_table}
     \addtocounter{figure}{-1}
