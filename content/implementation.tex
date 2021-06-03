@@ -26,7 +26,7 @@ There is a variety of simulation tools that could be applied for training of RL 
 
 \bigskip
 
-From the considered robotics simulators, Ignition Gazebo is selected in this work due to the following reasons. Compared to MuJoCo that requires a license, it is open-source, which significantly encourages reproducibility. Although Isaac might be a very promising choice for robotics RL research in the future, it is still under development and its proprietary nature could make it difficult to extend for the needs of this work. PyBullet is currently considered to be a one of the best open-source options due to its maturity and a large amount of RL research that has already been conducted with it. However, it lacks PBR rendering capabilities that are already part of Ignition Gazebo. Furthermore, the plugin-based architecture of Ignition Gazebo simplifies addition of new physics engine, where Bullet support is already pending. Its ability to switch between various physics engines during run-time could eventually provide Ignition Gazebo with one of the best physics-based domain randomisation, as it would not only allow randomising physics parameters but also the entire physics implementation. The major disadvantage of the selected Ignition Gazebo robotics simulator is its relatively early stage and a very limited amount of RL research conducted with it. Despite of this, the full availability of its source code makes it possible to extend where needed. Gazebo Classic was excluded from this considerations due to its planned deprecation.
+From the considered robotics simulators, Ignition Gazebo is selected in this work due to the following reasons. Compared to MuJoCo that requires a license, it is open-source, which significantly encourages reproducibility. Although Isaac might be a very promising choice for robotics RL research in the future, it is still under development and its proprietary nature could make it difficult to extend for the needs of this work. PyBullet is currently considered to be a one of the best open-source options due to its maturity and a large amount of RL research that has already been conducted with it. However, it lacks PBR rendering capabilities that are already part of Ignition Gazebo. Furthermore, the plugin-based architecture of Ignition Gazebo simplifies addition of new physics engine, where Bullet support is already pending. Its ability to switch between various physics engines during runtime could eventually provide Ignition Gazebo with one of the best physics-based domain randomisation, as it would not only allow randomising physics parameters but also the entire physics implementation. The major disadvantage of the selected Ignition Gazebo robotics simulator is its relatively early stage and a very limited amount of RL research conducted with it. Despite of this, the full availability of its source code makes it possible to extend where needed. Gazebo Classic was excluded from this considerations due to its planned deprecation.
 
 Therefore, Ignition Gazebo is used to create an environment for robotic grasping with RL. For the physics engine, the default option of DART is kept unchanged. For rendering engine, OGRE~2 is selected due to its PBR capabilities. Gym-Ignition \cite{ferigo_gym-ignition_2020} is utilised because it simplifies interaction with Ignition Gazebo with focus on RL research. Furthermore, Gym-Ignition facilitates the process of exposing OpenAI Gym \cite{brockman_openai_2016} interface for the environments, which provides a standardised form that makes environments compatible with most RL frameworks that contain implementations of algorithms.
 
@@ -131,7 +131,7 @@ Having a performant simulation accelerates the data collection, which can in tur
 
 \bigskip
 
-With performance in mind, the control rate of RL agent is set to a lower frequency of~2.5~Hz. This is because the agent only provides high-level control, whereas the motion planner and low-level joint controllers take care of interactions that require faster reaction times. On a laptop with Intel Core i7-10875H CPU and Nvidia Quadro T2000 GPU, the simulated environment with physics and the aforementioned perception progresses at a real-time factor of~329\% for a single object and~196\% for four objects.
+With performance in mind, the control rate of RL agent is set to a lower frequency of~2.5~Hz. This is because the agent only provides high-level control, whereas the motion planner and low-level joint controllers take care of interactions that require faster reaction times. On a laptop with Intel Core i7-10875H CPU and Nvidia Quadro T2000 GPU, the simulation environment with physics and the aforementioned perception progresses at a real-time factor of~329\% for a single object and~196\% for four objects.
 
 \subsection{Domain Randomisation}\label{sec:impl_domain_randomisation}
 
@@ -154,7 +154,7 @@ Examples of fully randomised scenes are shown in \autoref{fig:impl_domain_random
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1.0\textwidth]{implementation/domain_randomisation.png}
-    \caption{Examples of domain randomisation applied to the implemented simulated environment for robotic grasping.}
+    \caption{Examples of domain randomisation applied to the implemented simulation environment for robotic grasping.}
     \label{fig:impl_domain_randomisation}
 \end{figure}
 
@@ -203,7 +203,7 @@ As it was previously described in \autoref{subsec:problem_formulation_octree}, e
 
 \subsubsection{Network Architecture of Feature Extractor}
 
-After octrees are created, NN can use them to extract abstract visual features about the environment. Due to the popularity of CNN architectures for image-based DL, 3D octree-based CNN is employed in this work with. In order to incorporate proprioceptive observations from \autoref{subsec:problem_formulation_proprioceptive_observations}, these are processed only slightly and concatenated with the features extracted from octrees. The developed architecture of the network is represented in \autoref{fig:feature_extractor_architecture}.
+After octrees are created, NN can use them to extract abstract visual features about the environment. Due to the popularity of CNN architectures for image-based DL, 3D octree-based CNN is employed in this work. In order to incorporate proprioceptive observations from \autoref{subsec:problem_formulation_proprioceptive_observations}, these are processed only slightly and concatenated with the features extracted from octrees. The developed architecture of the network is represented in \autoref{fig:feature_extractor_architecture}.
 
 \begin{figure}[ht]
     \centering
