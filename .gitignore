@@ -290,6 +290,8 @@ TSWLatexianTemp*
 *.svg
 # keep SVGs that are used inside readme as a substitute for PDFs
 !**/_readme/*.svg
+# keep SVGs that are used inside readme of other repositories as part of media
+!**/media/svg/*.svg
 
 # ODS lock
 .~lock*#
